@@ -18,24 +18,8 @@
         <hr>
         <a href="/logout">Logout</a>
     {% else %}
-        <h2>Login</h2>
-        <form action="/login" method="POST">
-            <p>Username:<br>
-            <input type="text" name="username"></p>
-            <p>Password:<br>
-            <input type="password" name="password"></p>
-            <input type="submit" value="Kirjaudu">
-        </form>
-        <hr>
-        <h2>Register</h2>
-        <form action="/register" method="POST">
-            <p>Register:</p>
-            <p>Username:<br>
-            <input type="text" name="username"></p>
-            <p>Password:<br>
-            <input type="password" name="password"></p>
-            <input type="submit" value="Register">
-        </form>
+        <p>You are not logged in</p>
+        <a href="/login">Login/Register</a>
     {% endif %}
 </body>
 </html>
