@@ -6,13 +6,26 @@ from users import *
 def index():
     return render_template("index.html")
 
+@app.route("/dashboard", methods=["GET"])
+def dashboard():
+    username = user_id()
+    if username is None:
+        flash("You must be logged in to access the dashboard", "error")
+        return redirect("/login")
+    else:
+        '''sql = text("SELECT * FROM table WHERE username=:username")
+        result = db.session.execute(sql, {"username":username})
+        user_content = result.fetchall()
+        return render_template("dashboard.html", content=user_content)'''
+        return render_template("dashboard.html")
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
         if login_user(username, password):
-            return redirect("/")
+            return redirect("dashboard")
         else:
             flash("Invalid username or password", "error")
     return render_template("login.html")

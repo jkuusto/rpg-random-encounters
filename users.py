@@ -25,3 +25,6 @@ def register_user(username, password):
         return True
     except:
         return False
+
+def user_id():
+    return session.get("user_id",0)
