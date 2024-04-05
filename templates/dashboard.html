@@ -6,9 +6,12 @@
 </head>
 <body>
     <h1>Dashboard</h1>
-    <!-- {% for item in content %}
-        <p>{{ item }}</p>
-    {% endfor %} -->
+    <h2>Your Games</h2>
+    {% for game in games %}
+        <p>{{ game.name }}</p>
+    {% else %}
+        <p>You have no games yet.</p>
+    {% endfor %}
     <a href="/">Home</a>
     <a href="/logout">Logout</a>
 </body>

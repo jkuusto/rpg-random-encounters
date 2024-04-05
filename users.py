@@ -11,10 +11,12 @@ def login_user(username, password):
         return False
     else:
         session["username"] = username
+        session["user_id"] = user.id
         return True
 
 def logout_user():
     del session["username"]
+    del session["user_id"]
 
 def register_user(username, password):
     hash_value = generate_password_hash(password)

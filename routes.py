@@ -8,16 +8,15 @@ def index():
 
 @app.route("/dashboard", methods=["GET"])
 def dashboard():
-    username = user_id()
-    if username is None:
+    user_id_value = user_id()
+    if not user_id_value:
         flash("You must be logged in to access the dashboard", "error")
         return redirect("/login")
     else:
-        '''sql = text("SELECT * FROM table WHERE username=:username")
-        result = db.session.execute(sql, {"username":username})
-        user_content = result.fetchall()
-        return render_template("dashboard.html", content=user_content)'''
-        return render_template("dashboard.html")
+        sql = text("SELECT name FROM games WHERE user_id=:user_id")
+        result = db.session.execute(sql, {"user_id":user_id_value})
+        games = result.fetchall()
+        return render_template("dashboard.html", games=games)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
