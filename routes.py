@@ -13,10 +13,30 @@ def dashboard():
         flash("You must be logged in to access the dashboard", "error")
         return redirect("/login")
     else:
-        sql = text("SELECT name FROM games WHERE user_id=:user_id")
+        sql = text("SELECT id, name FROM games WHERE user_id=:user_id")
         result = db.session.execute(sql, {"user_id":user_id_value})
         games = result.fetchall()
         return render_template("dashboard.html", games=games)
+    
+@app.route("/game/<int:game_id>", methods=["GET"])
+def game(game_id):
+    sql = text("SELECT user_id, name FROM games WHERE id=:game_id")
+    result = db.session.execute(sql, {"game_id":game_id})
+    game = result.fetchone()
+    if not game or game.user_id != user_id():
+        flash("You don't have permission to access this page", "error")
+        return redirect("/")
+    else:
+        sql = text("""
+                   SELECT encounter_types.name 
+                   FROM main_probability 
+                   JOIN encounter_types 
+                   ON main_probability.encounter_type_id = encounter_types.id 
+                   WHERE main_probability.game_id=:game_id
+                   """)
+        result = db.session.execute(sql, {"game_id":game_id})
+        encounter_types = result.fetchall()
+        return render_template("game.html", game_name=game.name, encounter_types=encounter_types)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

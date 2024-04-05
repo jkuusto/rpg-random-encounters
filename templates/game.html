@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game</title>
+</head>
+<body>
+    <h1>{{ game_name }}</h1>
+    {% for encounter_type in encounter_types %}
+        <p>{{ encounter_type.name }}</p>
+    {% else %}
+        <p>This game has no encounter types yet.</p>
+    {% endfor %}
+    <a href="/dashboard">Back to dashboard</a>
+    <a href="/logout">Logout</a>
+</body>
+</html>
