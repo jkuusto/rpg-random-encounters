@@ -30,3 +30,39 @@ def get_encounter_types(game_id):
                                   encounter_type.name))
         start_range = end_range + 1
     return ranges_with_types
+
+def create_new_game(game_name, user_id):
+    sql = text("INSERT INTO games (name, user_id, biome_id) VALUES (:name, :user_id, 1) RETURNING id")
+    result = db.session.execute(sql, {"name":game_name, "user_id":user_id})
+    game_id = result.fetchone()[0]
+    db.session.commit()
+
+    # Main_probability table
+    sql = text("""
+               INSERT INTO main_probability (game_id, encounter_type_id, roll_range, preset)
+               SELECT :game_id, encounter_type_id, roll_range, false
+               FROM main_probability
+               WHERE preset=true
+               """)
+    db.session.execute(sql, {"game_id":game_id})
+    db.session.commit()
+
+    # Ecounters_general table
+    sql = text("""
+               INSERT INTO encounters_general (game_id, roll_range, description, preset)
+               SELECT :game_id, roll_range, description, false
+               FROM encounters_general
+               WHERE preset=true
+               """)
+    db.session.execute(sql, {"game_id":game_id})
+    db.session.commit()
+
+    # Encounters_biome table
+    sql = text("""
+               INSERT INTO encounters_biome (game_id, roll_range, biome_id, description, preset)
+               SELECT :game_id, roll_range, biome_id, description, false
+               FROM encounters_biome
+               WHERE preset=true
+               """)
+    db.session.execute(sql, {"game_id":game_id})
+    db.session.commit()

@@ -7,11 +7,25 @@
 <body>
     <h1>Dashboard</h1>
     <h2>Your Games</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     {% for game in games %}
         <p><a href="{{ url_for('game', game_id=game.id) }}">{{game.name }}</a></p>
     {% else %}
         <p>You have no games yet.</p>
     {% endfor %}
+    <br><hr>
+    <h2>Create a New Game</h2>
+    <form action="{{ url_for('create_game') }}" method="post">
+        <label for="name">Game Name:</label>
+        <input type="text" id="name" name="name" required>
+        <input type="submit" value="Create Game">
+    </form>
     <br><hr>
     <a href="/">Home</a>
     <a href="/logout">Logout</a>

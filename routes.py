@@ -1,7 +1,7 @@
 from app import app
 from flask import redirect, render_template, request, flash
 from users import *
-from tables import get_games, get_game, get_encounter_types
+from tables import get_games, get_game, get_encounter_types, create_new_game
 
 @app.route("/")
 def index():
@@ -26,6 +26,18 @@ def game(game_id):
     else:
         encounter_types = get_encounter_types(game_id)
         return render_template("game.html", game_name=game.name, encounter_types=encounter_types)
+    
+@app.route("/create_game", methods=["POST"])
+def create_game():
+    game_name = request.form["name"]
+    user_id_value = user_id()
+    if not user_id_value:
+        flash("You must be logged in to create a game", "error")
+        return redirect("/login")
+    else:
+        create_new_game(game_name, user_id_value)
+        flash("Game created successfully", "success")
+        return redirect("/dashboard")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

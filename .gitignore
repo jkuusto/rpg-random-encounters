@@ -162,4 +162,5 @@ cython_debug/
 # Temporary debugging files
 start.txt
 test.py
-*webp
+*.webp
+jkuusto_backup_20240405.sql
