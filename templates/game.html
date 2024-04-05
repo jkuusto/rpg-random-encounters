@@ -6,11 +6,27 @@
 </head>
 <body>
     <h1>{{ game_name }}</h1>
-    {% for encounter_type in encounter_types %}
-        <p>{{ encounter_type.name }}</p>
-    {% else %}
-        <p>This game has no encounter types yet.</p>
-    {% endfor %}
+    <h2>Main Encounter Probability Table</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Roll</th>
+                <th>Encounter Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for roll_range, encounter_type in encounter_types %}
+                <tr>
+                    <td>{{ roll_range }}</td>
+                    <td>{{ encounter_type}}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">No encounter types set.</td>
+                </tr>
+            {% endfor %}
+    </table>
+    <br><hr>
     <a href="/dashboard">Back to dashboard</a>
     <a href="/logout">Logout</a>
 </body>
