@@ -36,32 +36,24 @@ def create_new_game(game_name, user_id):
     result = db.session.execute(sql, {"name":game_name, "user_id":user_id})
     game_id = result.fetchone()[0]
     db.session.commit()
+    
+    # Copy preset entries to the new game
+    copy_preset_entries("main_probability", game_id, ["game_id", "encounter_type_id", "roll_range", "preset"])
+    copy_preset_entries("encounters_general", game_id, ["game_id", "roll_range", "description", "preset"])
+    copy_preset_entries("encounters_biome", game_id, ["game_id", "roll_range", "biome_id", "description", "preset"]) 
 
-    # Main_probability table
-    sql = text("""
-               INSERT INTO main_probability (game_id, encounter_type_id, roll_range, preset)
-               SELECT :game_id, encounter_type_id, roll_range, false
-               FROM main_probability
-               WHERE preset=true
-               """)
-    db.session.execute(sql, {"game_id":game_id})
-    db.session.commit()
-
-    # Ecounters_general table
-    sql = text("""
-               INSERT INTO encounters_general (game_id, roll_range, description, preset)
-               SELECT :game_id, roll_range, description, false
-               FROM encounters_general
-               WHERE preset=true
-               """)
-    db.session.execute(sql, {"game_id":game_id})
-    db.session.commit()
-
-    # Encounters_biome table
-    sql = text("""
-               INSERT INTO encounters_biome (game_id, roll_range, biome_id, description, preset)
-               SELECT :game_id, roll_range, biome_id, description, false
-               FROM encounters_biome
+def copy_preset_entries(table_name, game_id, columns):
+    column_values = columns.copy()
+    column_values.remove("game_id")
+    column_values[column_values.index("preset")] = "false"
+    
+    columns_str = ", ".join(columns)
+    column_values_str = ", ".join(column_values)
+    
+    sql = text(f"""
+               INSERT INTO {table_name} ({columns_str})
+               SELECT :game_id, {column_values_str}
+               FROM {table_name}
                WHERE preset=true
                """)
     db.session.execute(sql, {"game_id":game_id})
