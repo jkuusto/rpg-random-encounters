@@ -63,7 +63,24 @@
         </table>
     </form>
     <br><hr>
-    
+
+    <h2>Encounter Tables</h2>
+    <button id="toggleButton">Show General Encounters Table</button>
+    <div id="generalEncounters" style="display: none;">**Placeholder for General Encounters table** (coming soon)</div>
+    <script>
+        document.getElementById("toggleButton").onclick = function() {
+            var generalEncounters = document.getElementById("generalEncounters");
+            if (generalEncounters.style.display === "none") {
+                generalEncounters.style.display = "block";
+                this.textContent = "Hide Table";
+            } else {
+                generalEncounters.style.display = "none";
+                this.textContent = "General Encounters";
+            }
+        }
+    </script>
+    <br><hr>
+
     <a href="/dashboard">Back to dashboard</a>
     <a href="/logout">Logout</a>
 
