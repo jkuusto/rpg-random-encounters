@@ -22,6 +22,8 @@ def get_encounter_types(game_id):
                """)
     result = db.session.execute(sql, {"game_id":game_id})
     encounter_types = result.fetchall()
+
+    # Create a list of tuples with the roll range limits and encounter types
     ranges_with_types = []
     start_range = 1
     for encounter_type in encounter_types:
@@ -56,5 +58,10 @@ def copy_preset_entries(table_name, game_id, columns):
                FROM {table_name}
                WHERE preset=true
                """)
+    db.session.execute(sql, {"game_id":game_id})
+    db.session.commit()
+
+def delete_game_from_db(game_id):
+    sql = text("DELETE FROM games WHERE id=:game_id")
     db.session.execute(sql, {"game_id":game_id})
     db.session.commit()

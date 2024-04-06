@@ -1,7 +1,7 @@
 from app import app
 from flask import redirect, render_template, request, flash
 from users import *
-from tables import get_games, get_game, get_encounter_types, create_new_game
+from tables import *
 
 @app.route("/")
 def index():
@@ -38,6 +38,19 @@ def create_game():
         create_new_game(game_name, user_id_value)
         flash("Game created successfully", "success")
         return redirect("/dashboard")
+
+@app.route("/delete_game/<int:game_id>", methods=["POST"])
+def delete_game(game_id):
+    if game_id == 1:
+        flash("This game cannot be deleted", "error")
+    else:
+        game = get_game(game_id)
+        if not game or game.user_id != user_id():
+            flash("You don't have permission to delete this game", "error")
+        else:
+            delete_game_from_db(game_id)
+            flash("Game deleted successfully", "success")
+    return redirect("/dashboard")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
