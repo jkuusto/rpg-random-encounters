@@ -4,9 +4,11 @@ from users import *
 from tables import *
 from random import randint
 
+
 @app.route("/")
 def index():
     return render_template("index.html")
+
 
 @app.route("/dashboard", methods=["GET"])
 def dashboard():
@@ -17,7 +19,8 @@ def dashboard():
     else:
         games = get_games(user_id_value)
         return render_template("dashboard.html", games=games)
-    
+
+
 @app.route("/game/<int:game_id>", methods=["GET"])
 def game(game_id):
     game = get_game(game_id)
@@ -26,8 +29,10 @@ def game(game_id):
         return redirect("/")
     else:
         encounter_types = get_encounter_types(game_id)
-        return render_template("game.html", game_id=game_id, game_name=game.name, encounter_types=encounter_types)
-    
+        biomes = get_biomes()
+        return render_template("game.html", game_id=game_id, game_name=game.name, encounter_types=encounter_types, biomes=biomes, current_biome_id=game.biome_id)
+
+
 @app.route("/create_game", methods=["POST"])
 def create_game():
     game_name = request.form["name"]
@@ -39,6 +44,7 @@ def create_game():
         create_new_game(game_name, user_id_value)
         flash("Game created successfully", "success")
         return redirect("/dashboard")
+
 
 @app.route("/delete_game/<int:game_id>", methods=["POST"])
 def delete_game(game_id):
@@ -53,6 +59,18 @@ def delete_game(game_id):
             flash("Game deleted successfully", "success")
     return redirect("/dashboard")
 
+
+@app.route("/change_biome/<int:game_id>", methods=["POST"])
+def change_biome(game_id):
+    new_biome_id = request.json['biome_id']
+    game = get_game(game_id)
+    if not game or game.user_id != user_id():
+        return "You don't have permission to change this game's biome", 403
+    else:
+        update_game_biome(game_id, new_biome_id)
+        return "Biome changed successfully", 200
+
+
 @app.route("/roll_type/<int:game_id>", methods=["POST"])
 def roll_type(game_id):
     encounter_types = get_encounter_types(game_id)
@@ -61,9 +79,10 @@ def roll_type(game_id):
     for roll_range, encounter_type in encounter_types:
         start_range, end_range = map(int, roll_range.split('-'))
         if start_range <= roll_result <= end_range:
-            flash(f"Type roll result {roll_result}: {encounter_type}", "success")
+            flash(f"Encounter type rolled ({roll_result}): {encounter_type}", "success")
             break
     return redirect(url_for('game', game_id=game_id))
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -76,10 +95,12 @@ def login():
             flash("Invalid username or password", "error")
     return render_template("login.html")
 
+
 @app.route("/logout")
 def logout():
     logout_user()
     return redirect("/")
+
 
 @app.route("/register", methods=["POST"])
 def register():
@@ -91,3 +112,4 @@ def register():
     else:
         flash("Registration failed", "error")
     return render_template("login.html")
+

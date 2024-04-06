@@ -7,7 +7,31 @@
 <body>
     <h1>{{ game_name }}</h1>
 
+    <script>
+        var gameId = "{{ game_id }}";
+    </script>
+    <label for="biomeSelect">Biome:</label>
+    <select id="biomeSelect" onchange="changeBiome(gameId)">
+        {% for biome in biomes %}
+            <option value="{{ biome.id }}" {% if biome.id == current_biome_id %}selected{% endif %}>{{ biome.name }}</option>
+        {% endfor %}
+    </select>
     
+    <script>
+    function changeBiome(gameId) {
+        var select = document.getElementById("biomeSelect");
+        var biomeId = select.options[select.selectedIndex].value;
+        fetch('/change_biome/' + gameId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({biome_id: biomeId}),
+        });
+    }
+    </script>
+    <br><hr>
+
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
@@ -39,7 +63,9 @@
         </table>
     </form>
     <br><hr>
+    
     <a href="/dashboard">Back to dashboard</a>
     <a href="/logout">Logout</a>
+
 </body>
 </html>
