@@ -6,26 +6,38 @@
 </head>
 <body>
     <h1>{{ game_name }}</h1>
-    <h2>Main Encounter Probability Table</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Roll</th>
-                <th>Encounter Type</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for roll_range, encounter_type in encounter_types %}
-                <tr>
-                    <td>{{ roll_range }}</td>
-                    <td>{{ encounter_type}}</td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="2">No encounter types set.</td>
-                </tr>
+
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
             {% endfor %}
-    </table>
+        {% endif %}
+    {% endwith %}
+
+    <h2>Main Encounter Probability Table</h2>
+    <form action="{{ url_for('roll_type', game_id=game_id) }}" method="post">
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="submit" value="Roll"></th>
+                    <th>Encounter Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for roll_range, encounter_type in encounter_types %}
+                    <tr>
+                        <td>{{ roll_range }}</td>
+                        <td>{{ encounter_type}}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">No encounter types set.</td>
+                    </tr>
+                {% endfor %}
+        </table>
+    </form>
     <br><hr>
     <a href="/dashboard">Back to dashboard</a>
     <a href="/logout">Logout</a>

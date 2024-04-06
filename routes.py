@@ -1,7 +1,8 @@
 from app import app
-from flask import redirect, render_template, request, flash
+from flask import redirect, render_template, request, flash, url_for
 from users import *
 from tables import *
+from random import randint
 
 @app.route("/")
 def index():
@@ -25,7 +26,7 @@ def game(game_id):
         return redirect("/")
     else:
         encounter_types = get_encounter_types(game_id)
-        return render_template("game.html", game_name=game.name, encounter_types=encounter_types)
+        return render_template("game.html", game_id=game_id, game_name=game.name, encounter_types=encounter_types)
     
 @app.route("/create_game", methods=["POST"])
 def create_game():
@@ -51,6 +52,18 @@ def delete_game(game_id):
             delete_game_from_db(game_id)
             flash("Game deleted successfully", "success")
     return redirect("/dashboard")
+
+@app.route("/roll_type/<int:game_id>", methods=["POST"])
+def roll_type(game_id):
+    encounter_types = get_encounter_types(game_id)
+    max_roll = int(encounter_types[-1][0].split('-')[1])
+    roll_result = randint(1, max_roll)
+    for roll_range, encounter_type in encounter_types:
+        start_range, end_range = map(int, roll_range.split('-'))
+        if start_range <= roll_result <= end_range:
+            flash(f"Type roll result {roll_result}: {encounter_type}", "success")
+            break
+    return redirect(url_for('game', game_id=game_id))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
