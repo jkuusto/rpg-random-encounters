@@ -30,7 +30,12 @@ def game(game_id):
     else:
         encounter_types = get_encounter_types(game_id)
         biomes = get_biomes()
-        return render_template("game.html", game_id=game_id, game_name=game.name, encounter_types=encounter_types, biomes=biomes, current_biome_id=game.biome_id)
+        return render_template("game.html", 
+                               game_id=game_id, 
+                               game_name=game.name, 
+                               encounter_types=encounter_types, 
+                               biomes=biomes, 
+                               current_biome_id=game.biome_id)
 
 
 @app.route("/create_game", methods=["POST"])
@@ -79,7 +84,8 @@ def roll_type(game_id):
     for roll_range, encounter_type in encounter_types:
         start_range, end_range = map(int, roll_range.split('-'))
         if start_range <= roll_result <= end_range:
-            flash(f"Encounter type rolled ({roll_result}): {encounter_type}", "success")
+            flash(f"Encounter type rolled ({roll_result}): {encounter_type}", 
+                  "success")
             break
     return redirect(url_for('game', game_id=game_id))
 

@@ -15,7 +15,11 @@ def get_games(user_id):
 
 def get_game(game_id):
     try:
-        sql = text("SELECT user_id, name, biome_id FROM games WHERE id=:game_id")
+        sql = text("""
+                   SELECT user_id, name, biome_id 
+                   FROM games 
+                   WHERE id=:game_id
+                   """)
         result = db.session.execute(sql, {"game_id":game_id})
         return result.fetchone()
     except SQLAlchemyError as e:
@@ -25,15 +29,24 @@ def get_game(game_id):
 
 def create_new_game(game_name, user_id):
     try:
-        sql = text("INSERT INTO games (name, user_id, biome_id) VALUES (:name, :user_id, 1) RETURNING id")
-        result = db.session.execute(sql, {"name":game_name, "user_id":user_id})
+        sql = text("""
+                   INSERT INTO games (name, user_id, biome_id) 
+                   VALUES (:name, :user_id, 1) RETURNING id""")
+        result = db.session.execute(sql, 
+                                    {"name":game_name, "user_id":user_id})
         game_id = result.fetchone()[0]
         db.session.commit()
         
         # Copy preset entries to the new game
-        copy_preset_entries("main_probability", game_id, ["game_id", "encounter_type_id", "roll_range", "preset"])
-        copy_preset_entries("encounters_general", game_id, ["game_id", "roll_range", "description", "preset"])
-        copy_preset_entries("encounters_biome", game_id, ["game_id", "roll_range", "biome_id", "description", "preset"]) 
+        copy_preset_entries("main_probability", game_id, 
+                            ["game_id", "encounter_type_id", 
+                             "roll_range", "preset"])
+        copy_preset_entries("encounters_general", game_id, 
+                            ["game_id", "roll_range", 
+                             "description", "preset"])
+        copy_preset_entries("encounters_biome", game_id, 
+                            ["game_id", "roll_range", 
+                             "biome_id", "description", "preset"]) 
     except SQLAlchemyError as e:
         print("An error occured while creating new game", e)
         db.session.rollback()
@@ -85,7 +98,7 @@ def get_encounter_types(game_id):
         result = db.session.execute(sql, {"game_id":game_id})
         encounter_types = result.fetchall()
 
-        # Create a list of tuples with the roll range limits and encounter types
+        # Create a list of tuples with roll range limits and encounter types
         ranges_with_types = []
         start_range = 1
         for encounter_type in encounter_types:
@@ -111,8 +124,12 @@ def get_biomes():
 
 def update_game_biome(game_id, new_biome_id):
     try:
-        sql = text("UPDATE games SET biome_id = :biome_id WHERE id = :game_id")
-        db.session.execute(sql, {"biome_id": new_biome_id, "game_id": game_id})
+        sql = text("""
+                   UPDATE games 
+                   SET biome_id = :biome_id 
+                   WHERE id = :game_id""")
+        db.session.execute(sql, 
+                           {"biome_id": new_biome_id, "game_id": game_id})
         db.session.commit()
     except SQLAlchemyError as e:
         print("An error occured while updating game biome", e)

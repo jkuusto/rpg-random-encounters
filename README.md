@@ -52,7 +52,6 @@ Progress update April 7, 2024
   added later but is not required by the scope of this project.
 - The layout and visual appearance are still in planning stage. Once all the 
   features are complete, the user interface will improved.
-- Code formatting will be refined to better align with Python best practices.
 
 
 ## Setup
