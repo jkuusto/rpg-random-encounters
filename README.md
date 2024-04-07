@@ -36,17 +36,17 @@ These are the the web app's main features:
 
 
 Progress update April 7, 2024
-- User management features have been implemented as planned. Considering add 
-  user account deletion feature.
+- User management features have been implemented as planned. Considering 
+  adding user account deletion feature.
 - Game creation and deletion implemented. Game renaming is still in progress.
 - For now, users can only roll for encounter type. Auto-roll on subsequent 
   encounter table is still in progress.
 - Edits to the probability ranges are still in progress although underlying 
   logic in range representation to support this has already been completed.
-- Encounter tables are not yet displayed to the user, so edit features are 
-  pertaining those tables are also still in progress. A javascript hide/edit 
-  table feature has been implemented to support encounter table user view.
-- The database has a few preset entries that are copied to every new game. 
+- Encounter tables are not yet displayed to the user, so edit features 
+  pertaining to those tables are also still in progress. A javascript hide/ 
+  edit feature has been implemented to support table user view.
+- The database has a few preset entries that are copied to new games. 
   These entries can be overwritten by the user on a game-by-game basis and 
   users can add their own custom content. Additional preset content may be 
   added later but is not required by the scope of this project.
@@ -70,11 +70,11 @@ $ cd <repository-directory>
 
 Before proceeding, ensure that the database is running:
 ```
-(venv) $ sudo service postgresql status
+$ sudo service postgresql status
 ```
 If the database isn't running, start it with:
 ```
-(venv) $ sudo service postgresql start
+$ sudo service postgresql start
 ```
 
 If you want to create a new database for this app, access psql and type:
@@ -101,8 +101,7 @@ $ source venv/bin/activate
 (venv) $ pip install -r ./requirements.txt
 ```
 
-The app's tables and content are created and inserted into the database 
-by pointing the commands in schema.sql to the postgresSQL interpreter:
+Create and populate the database by pointing the schema to psql:
 ```
 (venv) $ psql < schema.sql
 ```
@@ -124,13 +123,14 @@ To access the app locally, open a web browser and navigate to:
 1. On front page, click Login/Register
 2. Use the Register section to create a new user
 3. Login using the Login section, you will be redirected to the dashboard
-4. Create new games by giving it a new in the Create a New Game section, 
-   games will be listed under Your Games
+4. Create new games by giving it a name in the Create a New Game section, 
+   created games will be listed under Your Games
 5. Delete games, by clicking Delete next to a game
 6. Access a game by clicking its name
-7. You can change biome from the dropdown menu
-8. You can roll for encounter types by clicking Roll
+7. You can change game biome from the dropdown menu
+8. You can roll for encounter types by clicking Roll on the main table
 9. You can show/hide encounter tables by clicking corresponding buttons
+   (feature still in progress)
 
 
 ## Legal
