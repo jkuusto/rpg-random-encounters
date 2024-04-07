@@ -34,7 +34,64 @@ These are the the web app's main features:
 
 ## Setup
 
-(coming soon)
+The app has been created using Python 3.10.12 and PostgreSQL 14.11 but will 
+likely run on older versions, too, but compatibility is not guaranteed.
+
+Clone this repository to your computer and access its root directory.
+```
+$ git clone https://github.com/jkuusto/rpg-random-encounters
+$ cd <repository-directory>
+```
+
+Before proceeding, check that the database is running:
+```
+(venv) $ sudo service postgresql status
+```
+If the database is not running, start it with:
+```
+(venv) $ sudo service postgresql start
+```
+
+If you want to create a new database for this app, access psql and type:
+```
+user=# CREATE DATABASE newdbname;
+```
+You can create a new secret key with:
+```
+$ python3
+>>> import secrets
+>>> secrets.token_hex(16)
+```
+
+Create an .env file there with the following content:
+```
+DATABASE_URL=<database-local-address>
+SECRET_KEY=<secret-key>
+```
+
+Activate the virtual environment and install dependencies:
+```
+$ python3 -m venv venv
+$ source venv/bin/activate
+(venv) $ pip install -r ./requirements.txt
+```
+
+The app's tables and content are created and inserted into the database 
+by pointing the commands in schema.sql to the postgresSQL interpreter:
+```
+(venv) $ psql < schema.sql
+```
+Or if you created a new database for this app:
+```
+(venv) $ psql -d newdbname -f schema.sql
+```
+
+Now you can start the app with the following command:
+```
+$ (venv) flask run
+```
+To access the app locally, open a web browser and navigate to:
+`http://localhost:5000/` or `http_//127.0.0.1:5000/`
 
 
 ## Usage
