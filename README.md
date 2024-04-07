@@ -57,7 +57,9 @@ Progress update April 7, 2024
 ## Setup
 
 The app is not available online, so please follow these instructions to 
-run it locally on your computer. 
+run it locally on your computer.
+- $ indicates Bash commands
+- PS> indicates Windows PowerShell commands
 
 Python 3.10.12 and PostgreSQL 14.11 have been used in development but the app 
 will likely run on older versions, too, but compatibility is not guaranteed.
@@ -68,16 +70,18 @@ $ git clone https://github.com/jkuusto/rpg-random-encounters
 $ cd <repository-directory>
 ```
 
-Before proceeding, ensure that the database is running:
+Before proceeding, ensure that the database service is running:
 ```
 $ sudo service postgresql status
+PS> Get-Service -Name postgresql-x64-<version>
 ```
-If the database isn't running, start it with:
+If the database service isn't running, start it with:
 ```
 $ sudo service postgresql start
+PS> Start-Service -Name postgresql-x64-<version>
 ```
 
-If you want to create a new database for this app, access psql and type:
+If you want to create a new database for this app, go to psql and type:
 ```
 user=# CREATE DATABASE newdbname;
 ```
@@ -100,14 +104,21 @@ $ python3 -m venv venv
 $ source venv/bin/activate
 (venv) $ pip install -r ./requirements.txt
 ```
+```
+PS> python -m venv venv
+PS> Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+PS> .\venv\Scripts\Activate.ps1
+(venv) PS> pip install -r .\requirements.txt
+```
 
 Create and populate the database by pointing the schema to psql:
 ```
 (venv) $ psql < schema.sql
 ```
-Or if you created a new database for this app:
+Or by assigning a specific database for this app:
 ```
 (venv) $ psql -d newdbname -f schema.sql
+(venv) PS> Get-Content schema.sql | psql -U username -d databasename
 ```
 
 You can now start the app with the following command:
