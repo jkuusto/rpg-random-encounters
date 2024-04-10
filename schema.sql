@@ -155,7 +155,7 @@ CREATE TABLE public.games (
     id integer NOT NULL,
     user_id integer NOT NULL,
     biome_id integer NOT NULL,
-    name character varying NOT NULL
+    name character varying(30) NOT NULL
 );
 
 
