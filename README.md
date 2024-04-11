@@ -19,7 +19,7 @@ Each user is a basic user (a game master).
 These are the the web app's main features:
 
 - Users can log in, log out, and create a new user account. **COMPLETE**
-- Users can create games, edit existing games and delete games. **IN PROGRESS**
+- Users can create games, edit existing games and delete games. **COMPLETE**
 - Users can browse all games they've created and access them. **COMPLETE**
 - Users can select parameters for the game (just biome for now). **COMPLETE**
 - Selected game parameters are persistent between sessions. **COMPLETE**

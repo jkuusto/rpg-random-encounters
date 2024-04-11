@@ -50,6 +50,20 @@ def create_game():
         flash("Game created successfully", "success")
         return redirect("/dashboard")
 
+@app.route("/edit_text/<int:game_id>", methods=["GET", "POST"])
+def rename_game(game_id):
+    game = get_game(game_id)
+    if not game or game.user_id != user_id():
+        flash("You don't have permission to rename this game", "error")
+        return redirect("/")
+    else:
+        if request.method == "POST":
+            new_name = request.form["name"]
+            rename_game_in_db(game_id, new_name)
+            flash("Game renamed successfully", "success")
+            return redirect("/dashboard")
+        else:
+            return render_template("edit_text.html", game_id=game_id, game_name=game.name)
 
 @app.route("/delete_game/<int:game_id>", methods=["POST"])
 def delete_game(game_id):

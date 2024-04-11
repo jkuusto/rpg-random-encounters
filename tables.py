@@ -74,6 +74,14 @@ def copy_preset_entries(table_name, game_id, columns):
         print(f"An error occured copying preset entries to {table_name}", e)
         db.session.rollback()
 
+def rename_game_in_db(game_id, new_name):
+    try:
+        sql = text("UPDATE games SET name = :name WHERE id = :game_id")
+        db.session.execute(sql, {"name": new_name, "game_id": game_id})
+        db.session.commit()
+    except SQLAlchemyError as e:
+        print("An error occurred while renaming a game:", e)
+        db.session.rollback()
 
 def delete_game_from_db(game_id):
     try:
