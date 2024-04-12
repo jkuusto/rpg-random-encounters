@@ -65,14 +65,35 @@
     <br><hr>
 
     <h2>Encounter Tables</h2>
-    <button id="toggleButton">Show General Encounters Table</button>
-    <div id="generalEncounters" style="display: none;">**Placeholder for General Encounters table** (coming soon)</div>
+    <button id="toggleButton">General Encounters</button>
+    <div id="generalEncounters" style="display: none;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Roll</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for roll_range, description in encounters_general %}
+                    <tr>
+                        <td>{{ roll_range }}</td>
+                        <td>{{ description }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">No general encounters set.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     <script>
         document.getElementById("toggleButton").onclick = function() {
             var generalEncounters = document.getElementById("generalEncounters");
             if (generalEncounters.style.display === "none") {
                 generalEncounters.style.display = "block";
-                this.textContent = "Hide Table";
+                this.textContent = "Hide General Encounters";
             } else {
                 generalEncounters.style.display = "none";
                 this.textContent = "General Encounters";

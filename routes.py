@@ -30,12 +30,14 @@ def game(game_id):
     else:
         encounter_types = get_encounter_types(game_id)
         biomes = get_biomes()
+        encounters_general = get_encounters_general(game_id)
         return render_template("game.html", 
                                game_id=game_id, 
                                game_name=game.name, 
                                encounter_types=encounter_types, 
                                biomes=biomes, 
-                               current_biome_id=game.biome_id)
+                               current_biome_id=game.biome_id, 
+                               encounters_general=encounters_general)
 
 
 @app.route("/create_game", methods=["POST"])

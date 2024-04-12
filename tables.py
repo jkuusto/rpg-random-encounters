@@ -92,32 +92,43 @@ def delete_game_from_db(game_id):
         print("An error occured while deleting a game from db", e)
         db.session.rollback()
 
+def get_encounter_data(sql_query, game_param):
+    try:
+        result = db.session.execute(sql_query, game_param)
+        data = result.fetchall()
+
+        # Create a list of tuples: (roll range limits, name/description) 
+        ranges_with_data = []
+        start_range = 1
+        for encounter in data:
+            end_range = start_range + encounter[0] - 1 # roll_range
+            ranges_with_data.append((f"{start_range}-{end_range}", 
+                                     encounter[1])) # name or decription
+            start_range = end_range + 1
+        return ranges_with_data
+    except SQLAlchemyError as e:
+        print("An error occured while fetching encounter data from db", e)
+        return []
 
 def get_encounter_types(game_id):
-    try:
-        sql = text("""
-                SELECT main_probability.roll_range, encounter_types.name 
-                FROM main_probability 
-                JOIN encounter_types 
-                ON main_probability.encounter_type_id = encounter_types.id 
-                WHERE main_probability.game_id=:game_id 
-                ORDER BY main_probability.roll_range DESC
-                """)
-        result = db.session.execute(sql, {"game_id":game_id})
-        encounter_types = result.fetchall()
+    sql = text("""
+            SELECT main_probability.roll_range, encounter_types.name 
+            FROM main_probability 
+            JOIN encounter_types 
+            ON main_probability.encounter_type_id = encounter_types.id 
+            WHERE main_probability.game_id=:game_id 
+            ORDER BY main_probability.roll_range DESC
+            """)
+    return get_encounter_data(sql, {"game_id":game_id})
 
-        # Create a list of tuples with roll range limits and encounter types
-        ranges_with_types = []
-        start_range = 1
-        for encounter_type in encounter_types:
-            end_range = start_range + encounter_type.roll_range - 1
-            ranges_with_types.append((f"{start_range}-{end_range}", 
-                                    encounter_type.name))
-            start_range = end_range + 1
-        return ranges_with_types
-    except SQLAlchemyError as e:
-        print("An error occured while fetching encounter types from db", e)
-        return []
+def get_encounters_general(game_id):
+    sql = text("""
+            SELECT encounters_general.roll_range, encounters_general.description 
+            FROM encounters_general
+            WHERE encounters_general.game_id=:game_id 
+            ORDER BY encounters_general.roll_range DESC
+            """)
+    return get_encounter_data(sql, {"game_id":game_id})
 
 
 def get_biomes():
