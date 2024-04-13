@@ -27,7 +27,7 @@ These are the the web app's main features:
   **COMPLETE**
 - Users can "roll dice", i.e. randomly determine an encounter on the main 
   table and subsequently another "dice roll" is made automatically on a 
-  relevant sub-table. **IN PROGRESS**
+  relevant sub-table. **COMPLETE**
 - Users can make game-specific edits to the probability ranges in the main 
   encounter table. **UPCOMING / PLANNED**
 - Users can add, edit, and remove encounter entries in each sub-table, 

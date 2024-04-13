@@ -49,14 +49,6 @@
     </script>
     <br><hr>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
     <h2>Main Encounter Probability Table</h2>
     <form action="{{ url_for('roll_type', game_id=game_id) }}" method="post">
         <table>
@@ -81,7 +73,16 @@
     </form>
     <br><hr>
 
-    <h2>Encounter Tables</h2>
+    <h2>Encounters</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <br>
 
     <button id="toggleButtonGeneral">General Encounters</button>
     <div id="generalEncounters" style="display: none;">

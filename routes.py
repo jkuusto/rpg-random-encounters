@@ -105,9 +105,33 @@ def roll_type(game_id):
         if start_range <= roll_result <= end_range:
             flash(f"Encounter type rolled ({roll_result}): {encounter_type}", 
                   "success")
+            print(f"Encounter type: {encounter_type}")
+            if encounter_type == "General encounter":
+                roll_result, encounter = roll_general(game_id)
+            else:  # Biome
+                roll_result, encounter = roll_biome(game_id)
+            flash(f"Encounter rolled ({roll_result}): {encounter}", "success")
             break
     return redirect(url_for('game', game_id=game_id))
 
+def roll_general(game_id):
+    general_encounters = get_encounters_general(game_id)
+    max_roll = int(general_encounters[-1][0].split('-')[1])
+    roll_result = randint(1, max_roll)
+    for roll_range, encounter in general_encounters:
+        start_range, end_range = map(int, roll_range.split('-'))
+        if start_range <= roll_result <= end_range:
+            return roll_result, encounter
+
+def roll_biome(game_id):
+    game = get_game(game_id)
+    biome_encounters = get_encounters_biome(game_id, game.biome_id)
+    max_roll = int(biome_encounters[-1][0].split('-')[1])
+    roll_result = randint(1, max_roll)
+    for roll_range, encounter in biome_encounters:
+        start_range, end_range = map(int, roll_range.split('-'))
+        if start_range <= roll_result <= end_range:
+            return roll_result, encounter
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
