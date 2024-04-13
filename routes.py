@@ -67,7 +67,8 @@ def rename_game(game_id):
             flash("Game renamed successfully", "success")
             return redirect("/dashboard")
         else:
-            return render_template("edit_text.html", game_id=game_id, game_name=game.name)
+            return render_template("edit_text.html", game_id=game_id, 
+                                   game_name=game.name)
 
 @app.route("/delete_game/<int:game_id>", methods=["POST"])
 def delete_game(game_id):
@@ -105,33 +106,25 @@ def roll_type(game_id):
         if start_range <= roll_result <= end_range:
             flash(f"Encounter type rolled ({roll_result}): {encounter_type}", 
                   "success")
-            print(f"Encounter type: {encounter_type}")
+            # Make a successive roll for the encounter
             if encounter_type == "General encounter":
-                roll_result, encounter = roll_general(game_id)
-            else:  # Biome
-                roll_result, encounter = roll_biome(game_id)
+                encounters = get_encounters_general(game_id)
+            else:  # Biome encounter
+                game = get_game(game_id)
+                encounters = get_encounters_biome(game_id, game.biome_id)
+            roll_result, encounter = roll_encounter(encounters)
             flash(f"Encounter rolled ({roll_result}): {encounter}", "success")
             break
     return redirect(url_for('game', game_id=game_id))
 
-def roll_general(game_id):
-    general_encounters = get_encounters_general(game_id)
-    max_roll = int(general_encounters[-1][0].split('-')[1])
+def roll_encounter(encounters):
+    max_roll = int(encounters[-1][0].split('-')[1])
     roll_result = randint(1, max_roll)
-    for roll_range, encounter in general_encounters:
+    for roll_range, encounter in encounters:
         start_range, end_range = map(int, roll_range.split('-'))
         if start_range <= roll_result <= end_range:
             return roll_result, encounter
 
-def roll_biome(game_id):
-    game = get_game(game_id)
-    biome_encounters = get_encounters_biome(game_id, game.biome_id)
-    max_roll = int(biome_encounters[-1][0].split('-')[1])
-    roll_result = randint(1, max_roll)
-    for roll_range, encounter in biome_encounters:
-        start_range, end_range = map(int, roll_range.split('-'))
-        if start_range <= roll_result <= end_range:
-            return roll_result, encounter
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
