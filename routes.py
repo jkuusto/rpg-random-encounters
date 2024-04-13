@@ -1,5 +1,5 @@
 from app import app
-from flask import redirect, render_template, request, flash, url_for
+from flask import redirect, render_template, request, flash, url_for, jsonify
 from users import *
 from tables import *
 from random import randint
@@ -91,7 +91,8 @@ def change_biome(game_id):
         return "You don't have permission to change this game's biome", 403
     else:
         update_game_biome(game_id, new_biome_id)
-        return "Biome changed successfully", 200
+        # return json to update the biome encounters table on game.html
+        return jsonify(get_encounters_biome(game_id, new_biome_id))
 
 
 @app.route("/roll_type/<int:game_id>", methods=["POST"])

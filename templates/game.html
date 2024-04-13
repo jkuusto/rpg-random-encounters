@@ -27,6 +27,23 @@
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({biome_id: biomeId}),
+        })
+        // Update the biome encounters table
+        .then(response => response.json())
+        .then(table_entries => {
+            var table = document.getElementById("biomeEncountersTable");
+            // Clear the viewport table
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+            // Add rows back with updated entries to the table
+            for (var i = 0; i < table_entries.length; i++) {
+                var row = table.insertRow(-1);
+                for (var j = 0; j < table_entries[i].length; j++) {
+                    var cell = row.insertCell(j);
+                    cell.innerHTML = table_entries[i][j];
+                }
+            }
         });
     }
     </script>
@@ -65,6 +82,7 @@
     <br><hr>
 
     <h2>Encounter Tables</h2>
+
     <button id="toggleButtonGeneral">General Encounters</button>
     <div id="generalEncounters" style="display: none;">
         <table>
@@ -104,7 +122,7 @@
 
     <button id="toggleButtonBiome">Biome Encounters</button>
     <div id="biomeEncounters" style="display: none;">
-        <table>
+        <table id="biomeEncountersTable">
             <thead>
                 <tr>
                     <th>Roll</th>
