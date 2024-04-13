@@ -54,6 +54,7 @@ def create_game():
         flash("Game created successfully", "success")
         return redirect("/dashboard")
 
+
 @app.route("/edit_text/<int:game_id>", methods=["GET", "POST"])
 def rename_game(game_id):
     game = get_game(game_id)
@@ -69,6 +70,7 @@ def rename_game(game_id):
         else:
             return render_template("edit_text.html", game_id=game_id, 
                                    game_name=game.name)
+
 
 @app.route("/delete_game/<int:game_id>", methods=["POST"])
 def delete_game(game_id):
@@ -116,6 +118,7 @@ def roll_type(game_id):
             flash(f"Encounter rolled ({roll_result}): {encounter}", "success")
             break
     return redirect(url_for('game', game_id=game_id))
+
 
 def roll_encounter(encounters):
     max_roll = int(encounters[-1][0].split('-')[1])

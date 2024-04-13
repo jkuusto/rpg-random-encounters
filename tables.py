@@ -74,6 +74,7 @@ def copy_preset_entries(table_name, game_id, columns):
         print(f"An error occured copying preset entries to {table_name}", e)
         db.session.rollback()
 
+
 def rename_game_in_db(game_id, new_name):
     try:
         sql = text("UPDATE games SET name = :name WHERE id = :game_id")
@@ -83,6 +84,7 @@ def rename_game_in_db(game_id, new_name):
         print("An error occurred while renaming a game:", e)
         db.session.rollback()
 
+
 def delete_game_from_db(game_id):
     try:
         sql = text("DELETE FROM games WHERE id=:game_id")
@@ -91,6 +93,7 @@ def delete_game_from_db(game_id):
     except SQLAlchemyError as e:
         print("An error occured while deleting a game from db", e)
         db.session.rollback()
+
 
 def get_encounter_data(sql_query, game_param):
     try:
@@ -110,6 +113,7 @@ def get_encounter_data(sql_query, game_param):
         print("An error occured while fetching encounter data from db", e)
         return []
 
+
 def get_encounter_types(game_id):
     sql = text("""
             SELECT main_probability.roll_range, encounter_types.name 
@@ -120,6 +124,7 @@ def get_encounter_types(game_id):
             ORDER BY main_probability.roll_range DESC
             """)
     return get_encounter_data(sql, {"game_id":game_id})
+
 
 def get_encounters_general(game_id):
     sql = text("""
@@ -139,7 +144,8 @@ def get_biomes():
     except SQLAlchemyError as e:
         print("An error occured while fetching biomes from db", e)
         return []
-    
+
+
 def get_encounters_biome(game_id, biome_id):
     sql = text("""
             SELECT encounters_biome.roll_range, encounters_biome.description 
