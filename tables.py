@@ -139,6 +139,15 @@ def get_biomes():
     except SQLAlchemyError as e:
         print("An error occured while fetching biomes from db", e)
         return []
+    
+def get_encounters_biome(game_id, biome_id):
+    sql = text("""
+            SELECT encounters_biome.roll_range, encounters_biome.description 
+            FROM encounters_biome
+            WHERE encounters_biome.game_id=:game_id AND encounters_biome.biome_id=:biome_id
+            ORDER BY encounters_biome.roll_range DESC
+            """)
+    return get_encounter_data(sql, {"game_id":game_id, "biome_id":biome_id})
 
 
 def update_game_biome(game_id, new_biome_id):

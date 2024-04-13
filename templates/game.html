@@ -65,7 +65,7 @@
     <br><hr>
 
     <h2>Encounter Tables</h2>
-    <button id="toggleButton">General Encounters</button>
+    <button id="toggleButtonGeneral">General Encounters</button>
     <div id="generalEncounters" style="display: none;">
         <table>
             <thead>
@@ -89,7 +89,7 @@
         </table>
     </div>
     <script>
-        document.getElementById("toggleButton").onclick = function() {
+        document.getElementById("toggleButtonGeneral").onclick = function() {
             var generalEncounters = document.getElementById("generalEncounters");
             if (generalEncounters.style.display === "none") {
                 generalEncounters.style.display = "block";
@@ -97,6 +97,43 @@
             } else {
                 generalEncounters.style.display = "none";
                 this.textContent = "General Encounters";
+            }
+        }
+    </script>
+    <br>
+
+    <button id="toggleButtonBiome">Biome Encounters</button>
+    <div id="biomeEncounters" style="display: none;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Roll</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for roll_range, description in encounters_biome %}
+                    <tr>
+                        <td>{{ roll_range }}</td>
+                        <td>{{ description }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">No biome encounters set.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        document.getElementById("toggleButtonBiome").onclick = function() {
+            var generalEncounters = document.getElementById("biomeEncounters");
+            if (generalEncounters.style.display === "none") {
+                generalEncounters.style.display = "block";
+                this.textContent = "Hide Biome Encounters";
+            } else {
+                generalEncounters.style.display = "none";
+                this.textContent = "Biome Encounters";
             }
         }
     </script>
