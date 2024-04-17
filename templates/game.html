@@ -21,10 +21,10 @@
     function changeBiome(gameId) {
         var select = document.getElementById("biomeSelect");
         var biomeId = select.options[select.selectedIndex].value;
-        fetch('/change_biome/' + gameId, {
+        fetch("/change_biome/" + gameId, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({biome_id: biomeId}),
         })
@@ -39,8 +39,8 @@
             // Add rows back with updated entries to the table
             for (var i = 0; i < table_entries.length; i++) {
                 var row = table.insertRow(-1);
-                for (var j = 0; j < table_entries[i].length; j++) {
-                    var cell = row.insertCell(j);
+                for (var j = 1; j < table_entries[i].length; j++) {
+                    var cell = row.insertCell(j - 1);
                     cell.innerHTML = table_entries[i][j];
                 }
             }
@@ -56,13 +56,15 @@
                 <tr>
                     <th><input type="submit" value="Roll"></th>
                     <th>Encounter Type</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             <tbody>
-                {% for roll_range, encounter_type in encounter_types %}
-                    <tr>
+                {% for id, roll_range, encounter_type in encounter_types %}
+                    <tr data-id="{{ id }}">
                         <td>{{ roll_range }}</td>
                         <td>{{ encounter_type}}</td>
+                        <td><button class="range-button">Range</button></td>
                     </tr>
                 {% else %}
                     <tr>
@@ -94,7 +96,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for roll_range, description in encounters_general %}
+                {% for id, roll_range, description in encounters_general %}
                     <tr>
                         <td>{{ roll_range }}</td>
                         <td>{{ description }}</td>
@@ -119,7 +121,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for roll_range, description in encounters_biome %}
+                {% for id, roll_range, description in encounters_biome %}
                     <tr>
                         <td>{{ roll_range }}</td>
                         <td>{{ description }}</td>
@@ -146,7 +148,7 @@
                 } else {
                     div.style.display = "none";
                     this.textContent = this.textContent.replace("Hide ", "");
-                    sessionStorage.setItem(sessionKey, 'false');
+                    sessionStorage.setItem(sessionKey, "false");
                 }
             }
         }
@@ -159,8 +161,8 @@
         // Restore visibility setting of encounter tables after page reload
         window.onload = function() {
             // get visibility state from session storage
-            var generalEncountersVisible = sessionStorage.getItem('generalEncountersVisible');
-            var biomeEncountersVisible = sessionStorage.getItem('biomeEncountersVisible');
+            var generalEncountersVisible = sessionStorage.getItem("generalEncountersVisible");
+            var biomeEncountersVisible = sessionStorage.getItem("biomeEncountersVisible");
 
             // get references to the div elements
             var generalEncounters = document.getElementById("generalEncounters");
@@ -170,16 +172,67 @@
             var toggleButtonGeneral = document.getElementById("toggleButtonGeneral");
             var toggleButtonBiome = document.getElementById("toggleButtonBiome");
 
-            if (generalEncountersVisible === 'true') {
+            if (generalEncountersVisible === "true") {
                 generalEncounters.style.display = "block";
                 toggleButtonGeneral.textContent = "Hide General Encounters";
             }
 
-            if (biomeEncountersVisible === 'true') {
+            if (biomeEncountersVisible === "true") {
                 biomeEncounters.style.display = "block";
                 toggleButtonBiome.textContent = "Hide Biome Encounters";
             }
         }
+    </script>
+
+    <script>
+        // Event listener to edit range buttons
+        document.querySelectorAll(".range-button").forEach(function(button) {
+            button.addEventListener("click", function() {
+                var td = this.parentNode;
+
+                var tr = td.parentNode;
+
+                td.innerHTML = '';
+                var input = document.createElement("input");
+                input.type = "text";
+                input.placeholder = "New value, e.g. 20";
+                td.appendChild(input);
+                input.focus();
+
+                // Event listener to input range field
+                input.addEventListener("keydown", function(event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+
+                        console.log("ID:", tr.id);
+                        var newValue = event.target.value.trim();
+                        var id = tr.getAttribute("data-id");
+
+                        // Send request to server
+                        fetch("/change_roll_range/" + gameId, {
+                            method: 'POST',
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({id: id, roll_range: newValue}),
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error("Server responded with status: ${response.status}");
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log("Success:", data);
+                            location.reload();
+                        })
+                        .catch(error => {
+                            console.error("Fetch error:", error);
+                        });
+                    }
+                });
+            });
+        });
     </script>
     <br><hr>
 

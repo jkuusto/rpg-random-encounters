@@ -98,12 +98,24 @@ def change_biome(game_id):
         return jsonify(get_encounters_biome(game_id, new_biome_id))
 
 
+@app.route("/change_roll_range/<int:game_id>", methods=["POST"])
+def change_roll_range(game_id):
+    data = request.get_json()
+    id = data["id"]
+    roll_range = data["roll_range"]
+    game = get_game(game_id)
+    if not game or game.user_id != user_id():
+        return "You don't have permission to change the roll range", 403
+    update_roll_range_database(id, roll_range, game_id)
+    return jsonify({"status": "success"})
+
+
 @app.route("/roll_type/<int:game_id>", methods=["POST"])
 def roll_type(game_id):
     encounter_types = get_encounter_types(game_id)
-    max_roll = int(encounter_types[-1][0].split('-')[1])
+    max_roll = int(encounter_types[-1][1].split('-')[1])
     roll_result = randint(1, max_roll)
-    for roll_range, encounter_type in encounter_types:
+    for id, roll_range, encounter_type in encounter_types:
         start_range, end_range = map(int, roll_range.split('-'))
         if start_range <= roll_result <= end_range:
             flash(f"Encounter type rolled ({roll_result}): {encounter_type}", 
@@ -117,13 +129,13 @@ def roll_type(game_id):
             roll_result, encounter = roll_encounter(encounters)
             flash(f"Encounter rolled ({roll_result}): {encounter}", "success")
             break
-    return redirect(url_for('game', game_id=game_id))
+    return redirect(url_for("game", game_id=game_id))
 
 
 def roll_encounter(encounters):
-    max_roll = int(encounters[-1][0].split('-')[1])
+    max_roll = int(encounters[-1][1].split('-')[1])
     roll_result = randint(1, max_roll)
-    for roll_range, encounter in encounters:
+    for id, roll_range, encounter in encounters:
         start_range, end_range = map(int, roll_range.split('-'))
         if start_range <= roll_result <= end_range:
             return roll_result, encounter
