@@ -29,7 +29,7 @@ These are the the web app's main features:
   table and subsequently another "dice roll" is made automatically on a 
   relevant sub-table. **COMPLETE**
 - Users can make game-specific edits to the probability ranges in the main 
-  encounter table. **UPCOMING / PLANNED**
+  encounter table. **COMPLETE**
 - Users can add, edit, and remove encounter entries in each sub-table, 
   creating game-specific customizations. **UPCOMING / PLANNED**
 - Preset content uses 5E compatible game rules (see legal section) **COMPLETE**
