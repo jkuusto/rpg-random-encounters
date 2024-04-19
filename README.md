@@ -31,7 +31,7 @@ These are the the web app's main features:
 - Users can make game-specific edits to the probability ranges in the main 
   encounter table. **COMPLETE**
 - Users can add, edit, and remove encounter entries in each sub-table, 
-  creating game-specific customizations. **UPCOMING / PLANNED**
+  creating game-specific customizations. **IN PROGRESS**
 - Preset content uses 5E compatible game rules (see legal section) **COMPLETE**
 
 

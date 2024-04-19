@@ -42,17 +42,22 @@ def game(game_id):
                                encounters_biome=encounters_biome)
 
 
-@app.route("/create_game", methods=["POST"])
+@app.route("/create_game", methods=["GET", "POST"])
 def create_game():
-    game_name = request.form["name"]
     user_id_value = user_id()
     if not user_id_value:
         flash("You must be logged in to create a game", "error")
         return redirect("/login")
     else:
-        create_new_game(game_name, user_id_value)
-        flash("Game created successfully", "success")
-        return redirect("/dashboard")
+        if request.method == "POST":
+            game_name = request.form["content"]
+            create_new_game(game_name, user_id_value)
+            flash("Game created successfully", "success")
+            return redirect("/dashboard")
+        else:
+            placeholder_text = "Enter game name here (max. 30 characters)"
+            return render_template("edit_text.html", 
+                                   placeholder=placeholder_text)
 
 
 @app.route("/edit_text/<int:game_id>", methods=["GET", "POST"])
@@ -63,13 +68,15 @@ def rename_game(game_id):
         return redirect("/")
     else:
         if request.method == "POST":
-            new_name = request.form["name"]
+            new_name = request.form["content"]
             rename_game_in_db(game_id, new_name)
             flash("Game renamed successfully", "success")
             return redirect("/dashboard")
         else:
+            placeholder_text = "Enter new name here (max. 30 characters)"
             return render_template("edit_text.html", game_id=game_id, 
-                                   game_name=game.name)
+                                   game_name=game.name, 
+                                   placeholder=placeholder_text)
 
 
 @app.route("/delete_game/<int:game_id>", methods=["POST"])

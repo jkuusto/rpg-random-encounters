@@ -7,8 +7,9 @@
 <body>
     <h1>Text Editor</h1>
     <form action="" method="post">
-        <label for="name">Edit text:</label>
-        <input type="text" id="name" name="name" required>
+        <label for="textedit"></label>
+        <textarea id="textedit" name="content" placeholder="{{ placeholder }}" required>{{ preset }}</textarea>
+        <br>
         <input type="submit" value="Submit">
     </form>
 </body>
