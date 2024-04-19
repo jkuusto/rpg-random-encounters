@@ -191,3 +191,17 @@ def update_roll_range_database(id, roll_range, game_id):
     except SQLAlchemyError as e:
         print("An error occured while updating roll range in database", e)
         db.session.rollback()
+
+
+def insert_general_encounter_db(game_id, description):
+    try:
+        sql = text("""
+                   INSERT INTO encounters_general (game_id, description) 
+                   VALUES (:game_id, :description)""")
+        db.session.execute(sql, {"game_id": game_id, 
+                                 "description": description})
+        db.session.commit()
+    except SQLAlchemyError as e:
+        print("An error occured while creating new general encounter", e)
+        db.session.rollback()
+

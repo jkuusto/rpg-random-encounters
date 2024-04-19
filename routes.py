@@ -148,6 +148,24 @@ def roll_encounter(encounters):
             return roll_result, encounter
 
 
+@app.route("/create_general_encounter/<int:game_id>", methods=["GET", "POST"])
+def create_general_encounter(game_id):
+    game = get_game(game_id)
+    if not game or game.user_id != user_id():
+        flash("You don't have permission to create encounters here", "error")
+        return redirect("/")
+    else:
+        if request.method == "POST":
+            description = request.form["content"]
+            insert_general_encounter_db(game_id, description)
+            flash("Encounter created successfully", "success")
+            return redirect(url_for("game", game_id=game_id))
+        else:
+            placeholder_text = "Enter encounter description here"
+            return render_template("edit_text.html", 
+                                   placeholder=placeholder_text)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
