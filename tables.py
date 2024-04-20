@@ -208,3 +208,17 @@ def insert_encounter_db(table_name, game_id, description, **kwargs):
         print(f"An error occured while creating encounter in {table_name}", e)
         db.session.rollback()
 
+
+def update_encounter_description(table_name, encounter_id, new_description):
+    try:
+        sql = text(f"""
+                   UPDATE {table_name} SET description = :description 
+                   WHERE id = :encounter_id
+                   """)
+        db.session.execute(sql, {"description": new_description, 
+                                 "encounter_id": encounter_id})
+        db.session.commit()
+    except SQLAlchemyError as e:
+        print(f"An error occured updating description in {table_name}", e)
+        db.session.rollback()
+

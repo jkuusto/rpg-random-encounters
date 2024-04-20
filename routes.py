@@ -173,6 +173,22 @@ def create_encounter(encounter_type, game_id):
                                    placeholder=placeholder_text)
 
 
+@app.route("/edit_encounter/<string:table_name>/<int:encounter_id>/"
+           "<int:game_id>", methods=["GET", "POST"])
+def rewrite_encounter(table_name, encounter_id, game_id):
+    if request.method == "POST":
+        new_description = request.form["content"]
+        update_encounter_description(table_name, encounter_id, 
+                                     new_description)
+        flash("Encounter description updated successfully", "success")
+        return redirect(url_for("game", game_id=game_id))
+    else:
+        old_description = request.args.get("old_description", None)
+        return render_template("edit_text.html", 
+                               placeholder="Enter new description here", 
+                               preset=old_description)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":

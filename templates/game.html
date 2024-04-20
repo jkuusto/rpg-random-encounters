@@ -59,6 +59,7 @@
                 <tr>
                     <th>Roll</th>
                     <th>Description</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -66,6 +67,12 @@
                     <tr>
                         <td>{{ roll_range }}</td>
                         <td>{{ description }}</td>
+                        <td>
+                            <form action="{{ url_for('rewrite_encounter', table_name='encounters_general', encounter_id=id, game_id=game_id) }}" method="get">
+                                <input type="hidden" name="old_description" value="{{ description }}">
+                                <button type="submit">Rewrite</button>
+                            </form>
+                        </td>
                     </tr>
                 {% else %}
                     <tr>
@@ -85,6 +92,7 @@
                 <tr>
                     <th>Roll</th>
                     <th>Description</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -92,6 +100,12 @@
                     <tr>
                         <td>{{ roll_range }}</td>
                         <td>{{ description }}</td>
+                        <td>
+                            <form action="{{ url_for('rewrite_encounter', table_name='encounters_biome', encounter_id=id, game_id=game_id) }}" method="get">
+                                <input type="hidden" name="old_description" value="{{ description }}">
+                                <button type="submit">Rewrite</button>
+                            </form>
+                        </td>
                     </tr>
                 {% else %}
                     <tr>
