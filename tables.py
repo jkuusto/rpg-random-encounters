@@ -175,7 +175,7 @@ def get_encounters_biome(game_id, biome_id):
     return get_encounter_data(sql, {"game_id":game_id, "biome_id":biome_id})
 
 
-def update_roll_range_database(id, roll_range, game_id):
+def update_roll_range_db(id, roll_range, game_id):
     try:
         sql = text("""
                    UPDATE main_probability 
@@ -193,29 +193,18 @@ def update_roll_range_database(id, roll_range, game_id):
         db.session.rollback()
 
 
-def insert_general_encounter_db(game_id, description):
+def insert_encounter_db(table_name, game_id, description, **kwargs):
     try:
-        sql = text("""
-                   INSERT INTO encounters_general (game_id, description) 
-                   VALUES (:game_id, :description)""")
-        db.session.execute(sql, {"game_id": game_id, 
-                                 "description": description})
+        sql = text(f"""
+                   INSERT INTO {table_name} (game_id, description, 
+                   {" ,".join(kwargs.keys())}) VALUES 
+                   (:game_id, :description, {":" + ", :".join(kwargs.keys())})
+                   """)
+        params = {"game_id": game_id, "description": description}
+        params.update(kwargs) # Add kwargs to the params dict if they exist
+        db.session.execute(sql, params)
         db.session.commit()
     except SQLAlchemyError as e:
-        print("An error occured while creating new general encounter", e)
-        db.session.rollback()
-
-
-def insert_biome_encounter_db(game_id, biome_id, description):
-    try:
-        sql = text("""
-                   INSERT INTO encounters_biome (game_id, biome_id, description) 
-                   VALUES (:game_id, :biome_id, :description)""")
-        db.session.execute(sql, {"game_id": game_id, 
-                                 "biome_id": biome_id, 
-                                 "description": description})
-        db.session.commit()
-    except SQLAlchemyError as e:
-        print("An error occured while creating new biome encounter", e)
+        print(f"An error occured while creating encounter in {table_name}", e)
         db.session.rollback()
 

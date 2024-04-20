@@ -113,7 +113,7 @@ def change_roll_range(game_id):
     game = get_game(game_id)
     if not game or game.user_id != user_id():
         return "You don't have permission to change the roll range", 403
-    update_roll_range_database(id, roll_range, game_id)
+    update_roll_range_db(id, roll_range, game_id)
     return jsonify({"status": "success"})
 
 
@@ -148,8 +148,9 @@ def roll_encounter(encounters):
             return roll_result, encounter
 
 
-@app.route("/create_general_encounter/<int:game_id>", methods=["GET", "POST"])
-def create_general_encounter(game_id):
+@app.route("/create_encounter/<string:encounter_type>/<int:game_id>", 
+           methods=["GET", "POST"])
+def create_encounter(encounter_type, game_id):
     game = get_game(game_id)
     if not game or game.user_id != user_id():
         flash("You don't have permission to create encounters here", "error")
@@ -157,26 +158,13 @@ def create_general_encounter(game_id):
     else:
         if request.method == "POST":
             description = request.form["content"]
-            insert_general_encounter_db(game_id, description)
-            flash("Encounter created successfully", "success")
-            return redirect(url_for("game", game_id=game_id))
-        else:
-            placeholder_text = "Enter encounter description here"
-            return render_template("edit_text.html", 
-                                   placeholder=placeholder_text)
-
-
-@app.route("/create_biome_encounter/<int:game_id>", methods=["GET", "POST"])
-def create_biome_encounter(game_id):
-    game = get_game(game_id)
-    if not game or game.user_id != user_id():
-        flash("You don't have permission to create encounters here", "error")
-        return redirect("/")
-    else:
-        if request.method == "POST":
-            description = request.form["content"]
-            biome_id = game.biome_id  # get the current biome id from the game
-            insert_biome_encounter_db(game_id, biome_id, description)
+            if encounter_type == "general":
+                insert_encounter_db("encounters_general", game_id, 
+                                    description)
+            elif encounter_type == "biome":
+                biome_id = game.biome_id
+                insert_encounter_db("encounters_biome", game_id, description, 
+                                    biome_id=biome_id)
             flash("Encounter created successfully", "success")
             return redirect(url_for("game", game_id=game_id))
         else:
