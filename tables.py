@@ -205,3 +205,17 @@ def insert_general_encounter_db(game_id, description):
         print("An error occured while creating new general encounter", e)
         db.session.rollback()
 
+
+def insert_biome_encounter_db(game_id, biome_id, description):
+    try:
+        sql = text("""
+                   INSERT INTO encounters_biome (game_id, biome_id, description) 
+                   VALUES (:game_id, :biome_id, :description)""")
+        db.session.execute(sql, {"game_id": game_id, 
+                                 "biome_id": biome_id, 
+                                 "description": description})
+        db.session.commit()
+    except SQLAlchemyError as e:
+        print("An error occured while creating new biome encounter", e)
+        db.session.rollback()
+

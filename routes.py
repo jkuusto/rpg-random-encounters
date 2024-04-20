@@ -166,6 +166,25 @@ def create_general_encounter(game_id):
                                    placeholder=placeholder_text)
 
 
+@app.route("/create_biome_encounter/<int:game_id>", methods=["GET", "POST"])
+def create_biome_encounter(game_id):
+    game = get_game(game_id)
+    if not game or game.user_id != user_id():
+        flash("You don't have permission to create encounters here", "error")
+        return redirect("/")
+    else:
+        if request.method == "POST":
+            description = request.form["content"]
+            biome_id = game.biome_id  # get the current biome id from the game
+            insert_biome_encounter_db(game_id, biome_id, description)
+            flash("Encounter created successfully", "success")
+            return redirect(url_for("game", game_id=game_id))
+        else:
+            placeholder_text = "Enter encounter description here"
+            return render_template("edit_text.html", 
+                                   placeholder=placeholder_text)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
