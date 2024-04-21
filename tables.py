@@ -75,7 +75,7 @@ def copy_preset_entries(table_name, game_id, columns):
         db.session.rollback()
 
 
-def rename_game_in_db(game_id, new_name):
+def rename_game_db(game_id, new_name):
     try:
         sql = text("UPDATE games SET name = :name WHERE id = :game_id")
         db.session.execute(sql, {"name": new_name, "game_id": game_id})
@@ -85,7 +85,7 @@ def rename_game_in_db(game_id, new_name):
         db.session.rollback()
 
 
-def delete_game_from_db(game_id):
+def delete_game_db(game_id):
     try:
         sql = text("DELETE FROM games WHERE id=:game_id")
         db.session.execute(sql, {"game_id":game_id})
@@ -220,5 +220,15 @@ def update_encounter_description(table_name, encounter_id, new_description):
         db.session.commit()
     except SQLAlchemyError as e:
         print(f"An error occured updating description in {table_name}", e)
+        db.session.rollback()
+
+
+def delete_encounter_db(table_name, encounter_id):
+    try:
+        sql = text(f"DELETE FROM {table_name} WHERE id=:encounter_id")
+        db.session.execute(sql, {"encounter_id":encounter_id})
+        db.session.commit()
+    except SQLAlchemyError as e:
+        print(f"An error occured while deleting an encounter from {table_name}", e)
         db.session.rollback()
 

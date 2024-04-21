@@ -69,7 +69,7 @@ def rename_game(game_id):
     else:
         if request.method == "POST":
             new_name = request.form["content"]
-            rename_game_in_db(game_id, new_name)
+            rename_game_db(game_id, new_name)
             flash("Game renamed successfully", "success")
             return redirect("/dashboard")
         else:
@@ -88,7 +88,7 @@ def delete_game(game_id):
         if not game or game.user_id != user_id():
             flash("You don't have permission to delete this game", "error")
         else:
-            delete_game_from_db(game_id)
+            delete_game_db(game_id)
             flash("Game deleted successfully", "success")
     return redirect("/dashboard")
 
@@ -187,6 +187,18 @@ def rewrite_encounter(table_name, encounter_id, game_id):
         return render_template("edit_text.html", 
                                placeholder="Enter new description here", 
                                preset=old_description)
+
+
+@app.route("/delete_encounter/<string:table_name>/<int:encounter_id>/"
+           "<int:game_id>", methods=["POST"])
+def delete_encounter(table_name, encounter_id, game_id):
+    game = get_game(game_id)
+    if not game or game.user_id != user_id():
+        flash("You don't have permission to delete this encounter", "error")
+    else:
+        delete_encounter_db(table_name, encounter_id)
+        flash("Encounter deleted successfully", "success")
+    return redirect(url_for("game", game_id=game_id))
 
 
 @app.route("/login", methods=["GET", "POST"])

@@ -60,6 +60,7 @@
                     <th>Roll</th>
                     <th>Description</th>
                     <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,6 +72,11 @@
                             <form action="{{ url_for('rewrite_encounter', table_name='encounters_general', encounter_id=id, game_id=game_id) }}" method="get">
                                 <input type="hidden" name="old_description" value="{{ description }}">
                                 <button type="submit">Rewrite</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{{ url_for('delete_encounter', table_name='encounters_general', encounter_id=id, game_id=game_id) }}" method="post">
+                                <input type="submit" value="Delete">
                             </form>
                         </td>
                     </tr>
@@ -93,6 +99,7 @@
                     <th>Roll</th>
                     <th>Description</th>
                     <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -104,6 +111,11 @@
                             <form action="{{ url_for('rewrite_encounter', table_name='encounters_biome', encounter_id=id, game_id=game_id) }}" method="get">
                                 <input type="hidden" name="old_description" value="{{ description }}">
                                 <button type="submit">Rewrite</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{{ url_for('delete_encounter', table_name='encounters_biome', encounter_id=id, game_id=game_id) }}" method="post">
+                                <input type="submit" value="Delete">
                             </form>
                         </td>
                     </tr>
