@@ -31,27 +31,16 @@ These are the the web app's main features:
 - Users can make game-specific edits to the probability ranges in the main 
   encounter table. **COMPLETE**
 - Users can add, edit, and remove encounter entries in each sub-table, 
-  creating game-specific customizations. **IN PROGRESS**
+  creating game-specific customizations. **IN COMPLETE**
 - Preset content uses 5E compatible game rules (see legal section) **COMPLETE**
 
 
-Progress update April 7, 2024
-- User management features have been implemented as planned. Considering 
-  adding user account deletion feature.
-- Game creation and deletion implemented. Game renaming is still in progress.
-- For now, users can only roll for encounter type. Auto-roll on subsequent 
-  encounter table is still in progress.
-- Edits to the probability ranges are still in progress although underlying 
-  logic in range representation to support this has already been completed.
-- Encounter tables are not yet displayed to the user, so edit features 
-  pertaining to those tables are also still in progress. A javascript hide/ 
-  edit feature has been implemented to support table user view.
-- The database has a few preset entries that are copied to new games. 
-  These entries can be overwritten by the user on a game-by-game basis and 
-  users can add their own custom content. Additional preset content may be 
-  added later but is not required by the scope of this project.
-- The layout and visual appearance are still in planning stage. Once all the 
-  features are complete, the user interface will improved.
+Progress update April 21, 2024
+- All core features have now been implemented.
+- Security features will have to be reviewed, for example CSRF vulnerabilities.
+- An HTML template will be added next for a uniform look across pages.
+- After that, layout and visual appearance will be reviewed to improve the UI.
+- User account deletion feature might be added.
 
 
 ## Setup
