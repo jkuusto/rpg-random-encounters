@@ -40,6 +40,8 @@ Progress update April 21, 2024
 - Security features will have to be reviewed, for example CSRF vulnerabilities.
 - An HTML template will be added next for a uniform look across pages.
 - After that, layout and visual appearance will be reviewed to improve the UI.
+- Character limit for encounter descriptions will be set in source code.
+- User feedback upon invalid input to be added.
 - User account deletion feature might be added.
 
 
