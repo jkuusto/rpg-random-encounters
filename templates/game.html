@@ -27,7 +27,7 @@
             </thead>
             <tbody>
                 {% for id, roll_range, encounter_type in encounter_types %}
-                    <tr data-id="{{ id }}">
+                    <tr data-id="{{ id }}" data-table="main_probability">
                         <td>{{ roll_range }}</td>
                         <td>{{ encounter_type}}</td>
                         <td><button class="range-button">Range</button></td>
@@ -65,10 +65,11 @@
             </thead>
             <tbody>
                 {% for id, roll_range, description in encounters_general %}
-                    <tr>
+                    <tr data-id="{{ id }}" data-table="encounters_general">
                         <td>{{ roll_range }}</td>
                         <td>{{ description }}</td>
                         <td>
+                            <button class="range-button">Range</button>
                             <form action="{{ url_for('rewrite_encounter', table_name='encounters_general', encounter_id=id, game_id=game_id) }}" method="get">
                                 <input type="hidden" name="old_description" value="{{ description }}">
                                 <button type="submit">Rewrite</button>
@@ -87,7 +88,8 @@
                 {% endfor %}
             </tbody>
         </table>
-        <button id="createGeneralEncounter" onclick="window.location.href='/create_encounter/general/{{ game_id }}'">Add New Entry</button>
+        <!--<button id="createGeneralEncounter" onclick="window.location.href='/create_encounter/general/{{ game_id }}'">Add New Entry</button>-->
+        <a id="createGeneralEncounter" href="/create_encounter/general/{{ game_id }}">Add New General Encounter</a>
     </div>
     <br>
 
@@ -104,10 +106,11 @@
             </thead>
             <tbody>
                 {% for id, roll_range, description in encounters_biome %}
-                    <tr>
+                    <tr data-id="{{ id }}" data-table="encounters_biome">
                         <td>{{ roll_range }}</td>
                         <td>{{ description }}</td>
                         <td>
+                            <button class="range-button">Range</button>
                             <form action="{{ url_for('rewrite_encounter', table_name='encounters_biome', encounter_id=id, game_id=game_id) }}" method="get">
                                 <input type="hidden" name="old_description" value="{{ description }}">
                                 <button type="submit">Rewrite</button>
@@ -126,7 +129,8 @@
                 {% endfor %}
             </tbody>
         </table>
-        <button id="createBiomeEncounter" onclick="window.location.href='/create_encounter/biome/{{ game_id }}'">Add New Entry</button>
+        <!--<button id="createBiomeEncounter" onclick="window.location.href='/create_encounter/biome/{{ game_id }}'">Add New Entry</button>-->
+        <a id="createBiomeEncounter" href="/create_encounter/biome/{{ game_id }}">Add New Biome Encounter</a>
     </div>
     <br><hr>
 

@@ -5,7 +5,10 @@ from db import db
 
 def get_games(user_id):
     try:
-        sql = text("SELECT id, name FROM games WHERE user_id=:user_id")
+        sql = text("""
+                   SELECT id, name FROM games WHERE user_id=:user_id 
+                   ORDER BY id
+                   """)
         result = db.session.execute(sql, {"user_id":user_id})
         return result.fetchall()
     except SQLAlchemyError as e:
@@ -147,7 +150,7 @@ def get_encounter_types(game_id):
             JOIN encounter_types 
             ON main_probability.encounter_type_id = encounter_types.id 
             WHERE main_probability.game_id=:game_id 
-            ORDER BY main_probability.roll_range DESC
+            ORDER BY main_probability.roll_range DESC, main_probability.id ASC
             """)
     return get_encounter_data(sql, {"game_id":game_id})
 
@@ -158,7 +161,8 @@ def get_encounters_general(game_id):
             encounters_general.description 
             FROM encounters_general 
             WHERE encounters_general.game_id=:game_id 
-            ORDER BY encounters_general.roll_range DESC
+            ORDER BY encounters_general.roll_range DESC, 
+            encounters_general.id ASC
             """)
     return get_encounter_data(sql, {"game_id":game_id})
 
@@ -170,15 +174,15 @@ def get_encounters_biome(game_id, biome_id):
             FROM encounters_biome 
             WHERE encounters_biome.game_id=:game_id 
             AND encounters_biome.biome_id=:biome_id 
-            ORDER BY encounters_biome.roll_range DESC
+            ORDER BY encounters_biome.roll_range DESC, encounters_biome.id ASC
             """)
     return get_encounter_data(sql, {"game_id":game_id, "biome_id":biome_id})
 
 
-def update_roll_range_db(id, roll_range, game_id):
+def update_roll_range_db(id, roll_range, game_id, table_name):
     try:
-        sql = text("""
-                   UPDATE main_probability 
+        sql = text(f"""
+                   UPDATE {table_name} 
                    SET roll_range = :roll_range 
                    WHERE id = :id 
                    AND game_id = :game_id
@@ -189,17 +193,16 @@ def update_roll_range_db(id, roll_range, game_id):
                             "game_id": game_id})
         db.session.commit()
     except SQLAlchemyError as e:
-        print("An error occured while updating roll range in database", e)
+        print(f"An error occured updating roll range in {table_name}", e)
         db.session.rollback()
 
 
 def insert_encounter_db(table_name, game_id, description, **kwargs):
     try:
-        sql = text(f"""
-                   INSERT INTO {table_name} (game_id, description, 
-                   {" ,".join(kwargs.keys())}) VALUES 
-                   (:game_id, :description, {":" + ", :".join(kwargs.keys())})
-                   """)
+        columns = ', '.join(['game_id', 'description'] + list(kwargs.keys()))
+        values = ', '.join([':game_id', ':description'] 
+                           + [f':{k}' for k in kwargs.keys()])
+        sql = text(f"INSERT INTO {table_name} ({columns}) VALUES ({values})")
         params = {"game_id": game_id, "description": description}
         params.update(kwargs) # Add kwargs to the params dict if they exist
         db.session.execute(sql, params)
@@ -229,6 +232,6 @@ def delete_encounter_db(table_name, encounter_id):
         db.session.execute(sql, {"encounter_id":encounter_id})
         db.session.commit()
     except SQLAlchemyError as e:
-        print(f"An error occured while deleting an encounter from {table_name}", e)
+        print(f"An error occured deleting an encounter from {table_name}", e)
         db.session.rollback()
 

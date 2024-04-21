@@ -94,9 +94,9 @@ document.querySelectorAll(".range-button").forEach(function(button) {
             if (event.key === "Enter") {
                 event.preventDefault();
 
-                console.log("ID:", tr.id);
                 var newValue = event.target.value.trim();
                 var id = tr.getAttribute("data-id");
+                var tableName = tr.getAttribute("data-table");
 
                 // Send request to server
                 fetch("/change_roll_range/" + gameId, {
@@ -104,20 +104,22 @@ document.querySelectorAll(".range-button").forEach(function(button) {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({id: id, roll_range: newValue}),
+                    body: JSON.stringify({id: id, roll_range: newValue, table_name: tableName}),
                 })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error("Server responded with status: ${response.status}");
+                        throw new Error(`Server responded with status: ${response.status}`);
                     }
                     return response.json();
                 })
                 .then(data => {
-                    console.log("Success:", data);
+                    if (data.status === "success") {
                     location.reload();
+                    }
                 })
                 .catch(error => {
-                    console.error("Fetch error:", error);
+                    let errorMessage = document.getElementById("errorMessage");
+                    errorMessage.textContent = "An error occured while updating the roll range";
                 });
             }
         });

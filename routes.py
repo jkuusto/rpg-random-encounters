@@ -110,10 +110,12 @@ def change_roll_range(game_id):
     data = request.get_json()
     id = data["id"]
     roll_range = data["roll_range"]
+    table_name = data["table_name"]
     game = get_game(game_id)
     if not game or game.user_id != user_id():
         return "You don't have permission to change the roll range", 403
-    update_roll_range_db(id, roll_range, game_id)
+    update_roll_range_db(id, roll_range, game_id, table_name)
+    flash("Roll range updated successfully", "success")
     return jsonify({"status": "success"})
 
 
