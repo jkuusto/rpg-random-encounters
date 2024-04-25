@@ -1,8 +1,10 @@
 from app import app
-from flask import redirect, render_template, request, flash, url_for, jsonify
+from flask import (redirect, render_template, request, flash, url_for, 
+                   jsonify, abort)
 from users import *
 from tables import *
 from random import randint
+import secrets
 
 
 @app.route("/")
@@ -50,6 +52,8 @@ def create_game():
         return redirect("/login")
     else:
         if request.method == "POST":
+            if session.get("csrf_token") != request.form.get("csrf_token"):
+                abort(403)
             game_name = request.form["content"]
             create_new_game(game_name, user_id_value)
             flash("Game created successfully", "success")
@@ -68,6 +72,8 @@ def rename_game(game_id):
         return redirect("/")
     else:
         if request.method == "POST":
+            if session.get("csrf_token") != request.form.get("csrf_token"):
+                abort(403)
             new_name = request.form["content"]
             rename_game_db(game_id, new_name)
             flash("Game renamed successfully", "success")
@@ -81,6 +87,8 @@ def rename_game(game_id):
 
 @app.route("/delete_game/<int:game_id>", methods=["POST"])
 def delete_game(game_id):
+    if session.get("csrf_token") != request.form.get("csrf_token"):
+        abort(403)
     if game_id == 1:
         flash("This game cannot be deleted", "error")
     else:
@@ -95,6 +103,9 @@ def delete_game(game_id):
 
 @app.route("/change_biome/<int:game_id>", methods=["POST"])
 def change_biome(game_id):
+    data = request.get_json()
+    if session.get("csrf_token") != data.get("csrf_token"):
+        abort(403)
     new_biome_id = request.json['biome_id']
     game = get_game(game_id)
     if not game or game.user_id != user_id():
@@ -107,6 +118,9 @@ def change_biome(game_id):
 
 @app.route("/change_roll_range/<int:game_id>", methods=["POST"])
 def change_roll_range(game_id):
+    data = request.get_json()
+    if session.get("csrf_token") != data.get("csrf_token"):
+        abort(403)
     data = request.get_json()
     id = data["id"]
     roll_range = data["roll_range"]
@@ -121,6 +135,8 @@ def change_roll_range(game_id):
 
 @app.route("/roll_type/<int:game_id>", methods=["POST"])
 def roll_type(game_id):
+    if session.get("csrf_token") != request.form.get("csrf_token"):
+        abort(403)
     encounter_types = get_encounter_types(game_id)
     max_roll = int(encounter_types[-1][1].split('-')[1])
     roll_result = randint(1, max_roll)
@@ -159,6 +175,8 @@ def create_encounter(encounter_type, game_id):
         return redirect("/")
     else:
         if request.method == "POST":
+            if session.get("csrf_token") != request.form.get("csrf_token"):
+                abort(403)
             description = request.form["content"]
             if encounter_type == "general":
                 insert_encounter_db("encounters_general", game_id, 
@@ -179,6 +197,8 @@ def create_encounter(encounter_type, game_id):
            "<int:game_id>", methods=["GET", "POST"])
 def rewrite_encounter(table_name, encounter_id, game_id):
     if request.method == "POST":
+        if session.get("csrf_token") != request.form.get("csrf_token"):
+            abort(403)
         new_description = request.form["content"]
         update_encounter_description(table_name, encounter_id, 
                                      new_description)
@@ -194,6 +214,8 @@ def rewrite_encounter(table_name, encounter_id, game_id):
 @app.route("/delete_encounter/<string:table_name>/<int:encounter_id>/"
            "<int:game_id>", methods=["POST"])
 def delete_encounter(table_name, encounter_id, game_id):
+    if session.get("csrf_token") != request.form.get("csrf_token"):
+        abort(403)
     game = get_game(game_id)
     if not game or game.user_id != user_id():
         flash("You don't have permission to delete this encounter", "error")
@@ -209,6 +231,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         if login_user(username, password):
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("dashboard")
         else:
             flash("Invalid username or password", "error")
@@ -217,6 +240,8 @@ def login():
 
 @app.route("/logout")
 def logout():
+    if "csrf_token" in session:
+        session.pop("csrf_token")
     logout_user()
     return redirect("/")
 

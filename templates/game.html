@@ -17,6 +17,7 @@
 
     <h2>Main Encounter Probability Table</h2>
     <form action="{{ url_for('roll_type', game_id=game_id) }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
         <table>
             <thead>
                 <tr>
@@ -72,11 +73,13 @@
                             <button class="range-button">Range</button>
                             <form action="{{ url_for('rewrite_encounter', table_name='encounters_general', encounter_id=id, game_id=game_id) }}" method="get">
                                 <input type="hidden" name="old_description" value="{{ description }}">
+                                <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                                 <button type="submit">Rewrite</button>
                             </form>
                         </td>
                         <td>
                             <form action="{{ url_for('delete_encounter', table_name='encounters_general', encounter_id=id, game_id=game_id) }}" method="post">
+                                <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                                 <input type="submit" value="Delete">
                             </form>
                         </td>
@@ -113,11 +116,13 @@
                             <button class="range-button">Range</button>
                             <form action="{{ url_for('rewrite_encounter', table_name='encounters_biome', encounter_id=id, game_id=game_id) }}" method="get">
                                 <input type="hidden" name="old_description" value="{{ description }}">
+                                <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                                 <button type="submit">Rewrite</button>
                             </form>
                         </td>
                         <td>
                             <form action="{{ url_for('delete_encounter', table_name='encounters_biome', encounter_id=id, game_id=game_id) }}" method="post">
+                                <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                                 <input type="submit" value="Delete">
                             </form>
                         </td>
@@ -138,6 +143,7 @@
     <a href="/logout">Logout</a>
 
     <script>
+        var csrfToken = "{{ session['csrf_token'] }}";
         var gameId = "{{ game_id }}";
     </script>
     <script src="{{ url_for('static', filename='js/game.js') }}"></script>

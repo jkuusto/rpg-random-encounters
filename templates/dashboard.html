@@ -27,11 +27,13 @@
                 <td><a href="{{ url_for('game', game_id=game.id) }}">{{ game.name }}</a></td>
                 <td>
                     <form action="{{ url_for('rename_game', game_id=game.id) }}" method="get">
+                        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                         <button type="submit">Rename</button>
                     </form>
                 </td>
                 <td>
                     <form action="{{ url_for('delete_game', game_id=game.id) }}" method="post">
+                        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                         <input type="submit" value="Delete">
                     </form>
                 </td>
@@ -44,6 +46,7 @@
     </table>
     <br>
     <form action="{{ url_for('create_game') }}" method="get">
+        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
         <button type="submit">Create New Game</button>
     </form>
     <br><hr>

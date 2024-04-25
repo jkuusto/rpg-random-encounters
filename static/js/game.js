@@ -6,7 +6,7 @@ function changeBiome(gameId) {
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({biome_id: biomeId}),
+        body: JSON.stringify({biome_id: biomeId, csrf_token: csrfToken}),
     })
     .then(response => {
         if (!response.ok) {
@@ -90,7 +90,7 @@ document.querySelectorAll(".range-button").forEach(function(button) {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({id: id, roll_range: newValue, table_name: tableName}),
+                    body: JSON.stringify({id: id, roll_range: newValue, table_name: tableName, csrf_token: csrfToken}),
                 })
                 .then(response => {
                     if (!response.ok) {
