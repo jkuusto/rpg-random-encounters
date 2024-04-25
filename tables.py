@@ -199,8 +199,8 @@ def update_roll_range_db(id, roll_range, game_id, table_name):
 
 def insert_encounter_db(table_name, game_id, description, **kwargs):
     try:
-        columns = ', '.join(['game_id', 'description'] + list(kwargs.keys()))
-        values = ', '.join([':game_id', ':description'] 
+        columns = ", ".join(["game_id", "description"] + list(kwargs.keys()))
+        values = ", ".join([":game_id", ":description"] 
                            + [f':{k}' for k in kwargs.keys()])
         sql = text(f"INSERT INTO {table_name} ({columns}) VALUES ({values})")
         params = {"game_id": game_id, "description": description}
