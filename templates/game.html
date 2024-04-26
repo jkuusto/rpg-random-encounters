@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Game</title>
-</head>
-<body>
+{% extends "layout.html" %}
+
+{% block title %}Game{% endblock %}
+
+{% block content %}
+
     <h1>{{ game_name }}</h1>
 
     <label for="biomeSelect">Biome:</label>
@@ -13,9 +12,11 @@
             <option value="{{ biome.id }}" {% if biome.id == current_biome_id %}selected{% endif %}>{{ biome.name }}</option>
         {% endfor %}
     </select>
-    <br><hr>
+
+    <br>
 
     <h2>Main Encounter Probability Table</h2>
+
     <form action="{{ url_for('roll_type', game_id=game_id) }}" method="post">
         <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
         <table>
@@ -40,18 +41,20 @@
                 {% endfor %}
         </table>
     </form>
-    <br><hr>
 
-    <h2>Encounters</h2>
+    <br>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% with messages = get_flashed_messages(category_filter=["roll"]) %}
         {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% for message in messages %}
+                <div class="alert alert-success">{{ message }}</div>
             {% endfor %}
         {% endif %}
     {% endwith %}
-    <br>
+
+    <br><hr>
+
+    <h2>Encounter Tables</h2>
 
     <button id="toggleButtonGeneral">General Encounters</button>
     <div id="generalEncounters" style="display: none;">
@@ -94,6 +97,7 @@
         <!--<button id="createGeneralEncounter" onclick="window.location.href='/create_encounter/general/{{ game_id }}'">Add New Entry</button>-->
         <a id="createGeneralEncounter" href="/create_encounter/general/{{ game_id }}">Add New General Encounter</a>
     </div>
+
     <br>
 
     <button id="toggleButtonBiome">Biome Encounters</button>
@@ -137,15 +141,13 @@
         <!--<button id="createBiomeEncounter" onclick="window.location.href='/create_encounter/biome/{{ game_id }}'">Add New Entry</button>-->
         <a id="createBiomeEncounter" href="/create_encounter/biome/{{ game_id }}">Add New Biome Encounter</a>
     </div>
-    <br><hr>
 
-    <a href="/dashboard">Back to dashboard</a>
-    <a href="/logout">Logout</a>
+    <br><hr>
 
     <script>
         var csrfToken = "{{ session['csrf_token'] }}";
         var gameId = "{{ game_id }}";
     </script>
     <script src="{{ url_for('static', filename='js/game.js') }}"></script>
-</body>
-</html>
+
+{% endblock %}

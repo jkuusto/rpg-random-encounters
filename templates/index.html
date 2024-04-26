@@ -1,27 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Etusivu</title>
-</head>
-<body>
+{% extends "layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
     <h1>RPG Random Encounters</h1>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+
     {% if session.username %}
-        <p>You are logged in as {{ session.username }}</p>
+        <p>You are logged in as {{ session.username }}.</p>
         <a href="/dashboard">Go to dashboard</a>
-        <hr>
-        <a href="/logout">Logout</a>
     {% else %}
-        <p>You are not logged in</p>
+        <p>You are not logged in.</p>
         <a href="/login">Login/Register</a>
     {% endif %}
-</body>
-</html>
+
+{% endblock %}

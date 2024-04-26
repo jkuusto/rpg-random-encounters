@@ -144,7 +144,7 @@ def roll_type(game_id):
         start_range, end_range = map(int, roll_range.split('-'))
         if start_range <= roll_result <= end_range:
             flash(f"Encounter type rolled ({roll_result}): {encounter_type}", 
-                  "success")
+                  "roll")
             # Make a successive roll for the encounter
             if encounter_type == "General encounter":
                 encounters = get_encounters_general(game_id)
@@ -152,7 +152,7 @@ def roll_type(game_id):
                 game = get_game(game_id)
                 encounters = get_encounters_biome(game_id, game.biome_id)
             roll_result, encounter = roll_encounter(encounters)
-            flash(f"Encounter rolled ({roll_result}): {encounter}", "success")
+            flash(f"Encounter rolled ({roll_result}): {encounter}", "roll")
             break
     return redirect(url_for("game", game_id=game_id))
 

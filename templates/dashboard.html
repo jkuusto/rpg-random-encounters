@@ -1,21 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard</title>
-</head>
-<body>
+{% extends "layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
     <h1>Dashboard</h1>
-    
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
 
     <h2>Your Games</h2>
+
     <table>
         <tr>
             <th>Name</th>
@@ -44,14 +36,12 @@
             </tr>
         {% endfor %}
     </table>
+
     <br>
+
     <form action="{{ url_for('create_game') }}" method="get">
         <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
         <button type="submit">Create New Game</button>
     </form>
-    <br><hr>
 
-    <a href="/">Home</a>
-    <a href="/logout">Logout</a>
-</body>
-</html>
+{% endblock %}
