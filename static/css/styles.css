@@ -1,0 +1,29 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+nav li {
+    display: inline-block;
+    padding: 0 .5em;
+}
+
+main {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+}
+
+table {
+    border-collapse: collapse;  /* For cells to share borders */
+    max-width: 55em;
+}
+
+table td, table th {
+    border: 1px solid black;
+    padding: 10px;
+}
+
