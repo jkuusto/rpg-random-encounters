@@ -5,16 +5,43 @@ body {
     background-color: #f0f0f0;
 }
 
+nav {
+    width: 80%;
+    margin: 10px auto 10px;
+    padding: 1px 20px;
+    background-color: #ffffff;
+    border-radius: .5em
+}
+
+nav a {
+    color: #000000;  /* Nav text color */
+    text-decoration: none;  /* Remove the underline */
+}
+
+nav ul {
+    padding: 0; /* For overriding default list left padding */
+}
+
 nav li {
     display: inline-block;
-    padding: 0 .5em;
+    padding: 10px .5em;
+    background-color: #f0f0f0;
+    border-radius: .5em
+}
+
+#flash-user-feedback {
+    height: 15px;
+    line-height: 0px;
+    text-align: center;
+    color: #8f8f8f;
 }
 
 main {
     width: 80%;
     margin: 0 auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: #ffffff;
+    border-radius: .5em
 }
 
 table {
@@ -23,7 +50,7 @@ table {
 }
 
 table td, table th {
-    border: 1px solid black;
+    border: 1px solid #000000;
     padding: 10px;
 }
 
