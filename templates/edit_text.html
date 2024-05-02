@@ -11,6 +11,7 @@
         <textarea id="textedit" name="content" placeholder="{{ placeholder }}" required autofocus>{{ preset }}</textarea>
         <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
         <br>
+        <button type="button" onclick="window.history.back()">Cancel</button>
         <input type="submit" value="Submit">
     </form>
 
