@@ -72,7 +72,7 @@ document.querySelectorAll(".range-button").forEach(function(button) {
         td.innerHTML = "";
         td.appendChild(input);
         input.type = "text";
-        input.placeholder = "New value, e.g. 20";
+        input.placeholder = "Insert integer, e.g. 10";
         input.focus();
 
         // Event listener to input range field

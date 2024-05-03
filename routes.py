@@ -6,6 +6,9 @@ from tables import *
 from random import randint
 import secrets
 
+# Character limit for encounter descriptions
+DESCRIPTION_CHAR_LIMIT = 2000
+
 
 @app.route("/")
 def index():
@@ -128,6 +131,10 @@ def change_roll_range(game_id):
     game = get_game(game_id)
     if not game or game.user_id != user_id():
         return "You don't have permission to change the roll range", 403
+    try:
+        roll_range = int(roll_range)
+    except ValueError:
+        return jsonify({"status": "error"})
     update_roll_range_db(id, roll_range, game_id, table_name)
     flash("Roll range updated successfully", "success")
     return jsonify({"status": "success"})
@@ -178,6 +185,11 @@ def create_encounter(encounter_type, game_id):
             if session.get("csrf_token") != request.form.get("csrf_token"):
                 abort(403)
             description = request.form["content"]
+            if len(description) > DESCRIPTION_CHAR_LIMIT:
+                flash(f"Description must be {DESCRIPTION_CHAR_LIMIT} "
+                      f"characters or less", "error")
+                return render_template("edit_text.html",  
+                                    preset=description)
             if encounter_type == "general":
                 insert_encounter_db("encounters_general", game_id, 
                                     description)
@@ -200,6 +212,12 @@ def rewrite_encounter(table_name, encounter_id, game_id):
         if session.get("csrf_token") != request.form.get("csrf_token"):
             abort(403)
         new_description = request.form["content"]
+        if len(new_description) > DESCRIPTION_CHAR_LIMIT:
+            flash(f"Description must be {DESCRIPTION_CHAR_LIMIT} "
+                  f"characters or less", "error")
+            old_description = request.args.get("old_description", None)
+            return render_template("edit_text.html", 
+                                preset=new_description)
         update_encounter_description(table_name, encounter_id, 
                                      new_description)
         flash("Encounter description updated successfully", "success")
