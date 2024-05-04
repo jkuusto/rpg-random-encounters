@@ -58,6 +58,9 @@ def create_game():
             if session.get("csrf_token") != request.form.get("csrf_token"):
                 abort(403)
             game_name = request.form["content"]
+            if len(game_name) > 30:
+                flash("Game name must be 30 characters or less", "error")
+                return redirect("/dashboard")
             create_new_game(game_name, user_id_value)
             flash("Game created successfully", "success")
             return redirect("/dashboard")
@@ -78,6 +81,9 @@ def rename_game(game_id):
             if session.get("csrf_token") != request.form.get("csrf_token"):
                 abort(403)
             new_name = request.form["content"]
+            if len(new_name) > 30:
+                flash("Game name must be 30 characters or less", "error")
+                return redirect("/dashboard")
             rename_game_db(game_id, new_name)
             flash("Game renamed successfully", "success")
             return redirect("/dashboard")
