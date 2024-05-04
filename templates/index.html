@@ -8,10 +8,15 @@
 
     {% if session.username %}
         <p>You are logged in as {{ session.username }}.</p>
-        <a href="/dashboard">Go to dashboard</a>
+        <a href="/dashboard" class="stylized-link">Go to dashboard</a>
     {% else %}
         <p>You are not logged in.</p>
-        <a href="/login">Login/Register</a>
+        <a href="/login" class="stylized-link">Login/Register</a>
     {% endif %}
+
+    <h2>About</h2>
+    <p>RPG Random Encounters is a web application that generates random encounters for tabletop role-playing games. 
+        It's intended to help game masters enrich their games by presenting dynamic content and encouraging emergent storytelling.</p>
+    <p>You can create games, add and edit custom encounters in addition to the preset content. The app is free to use.</p>
 
 {% endblock %}

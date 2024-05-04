@@ -18,31 +18,40 @@ Each user is a basic user (a game master).
 
 These are the the web app's main features:
 
-- Users can log in, log out, and create a new user account. **COMPLETE**
-- Users can create games, edit existing games and delete games. **COMPLETE**
-- Users can browse all games they've created and access them. **COMPLETE**
-- Users can select parameters for the game (just biome for now). **COMPLETE**
-- Selected game parameters are persistent between sessions. **COMPLETE**
-- Main encounter table points to different sub-tables by encounter type. 
-  **COMPLETE**
+- Users can log in, log out, and create a new user account.
+- Users can create games, edit existing games and delete games.
+- Users can browse all games they've created and access them.
+- Users can select parameters for the game (just biome for now).
+- Selected game parameters are persistent between sessions.
+- Main encounter table points to different sub-tables by encounter type.
 - Users can "roll dice", i.e. randomly determine an encounter on the main 
   table and subsequently another "dice roll" is made automatically on a 
-  relevant sub-table. **COMPLETE**
+  relevant sub-table.
 - Users can make game-specific edits to the probability ranges in the main 
-  encounter table. **COMPLETE**
+  encounter table.
 - Users can add, edit, and remove encounter entries in each sub-table, 
-  creating game-specific customizations. **IN COMPLETE**
-- Preset content uses 5E compatible game rules (see legal section) **COMPLETE**
+  creating game-specific customizations.
+- Preset content uses 5E compatible game rules (see legal section).
 
 
-Progress update April 21, 2024
-- All core features have now been implemented.
-- Security features will have to be reviewed, for example CSRF vulnerabilities.
-- An HTML template will be added next for a uniform look across pages.
-- After that, layout and visual appearance will be reviewed to improve the UI.
-- Character limit for encounter descriptions will be set in source code.
-- User feedback upon invalid input to be added.
+Progress update May 4, 2024
+- All core features have been implemented.
+- CSRF vulnerabilities have been patched.
+- An HTML template has been added for a uniform look across pages.
+- Visual appearance has been worked on. A monochrome look was chosen.
+- Character limits for user inputs have been enforced where applicable.
+- User feedback upon invalid input has be added.
 - User account deletion feature might be added.
+
+
+Planned features for future development:
+- User account deletion on the dashboard
+- Verification dialogue when deleting games, encounters, or user
+- Ability to roll directly on a chosen encounter table
+- More game parameters and accompanying encounter tables to games
+- Customizible game parameters
+- Further improvements on visual appearance
+- Support for images for encounter entries
 
 
 ## Setup
@@ -122,17 +131,22 @@ To access the app locally, open a web browser and navigate to:
 
 ## Usage
 
-1. On front page, click Login/Register
-2. Use the Register section to create a new user
-3. Login using the Login section, you will be redirected to the dashboard
-4. Create new games by giving it a name in the Create a New Game section, 
-   created games will be listed under Your Games
-5. Delete games, by clicking Delete next to a game
-6. Access a game by clicking its name
-7. You can change game biome from the dropdown menu
-8. You can roll for encounter types by clicking Roll on the main table
-9. You can show/hide encounter tables by clicking corresponding buttons
-   (feature still in progress)
+1.  On front page, click Login/Register
+2.  Use the Register section to create a new user
+3.  Login using the Login section, you will be redirected to the dashboard
+4.  Create new games by clicking the button and giving it a name in the text 
+    editor. Created games will be listed under Your Games
+5.  Rename or delete games, by clicking the appropriate button next to a game
+6.  Access a game by clicking its name
+7.  On the game page you can change game biome from the dropdown menu
+8.  You can roll for encounters by clicking Roll on the main table
+9.  You can show/hide encounter tables by clicking corresponding buttons
+10. Change the roll range of any entry on a table by clicking Range, typing 
+    an integer and pressing enter. The table entries are reordered according 
+    to range value in descending order
+11. Rewrite or delete encounters by clicking the appropriate button next to 
+    the entry
+12. Add new encounters by clicking Add new encounter on the bottom of a table
 
 
 ## Legal
