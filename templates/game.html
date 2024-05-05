@@ -48,6 +48,7 @@
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-success">{{ message }}</div>
+                {% if not loop.last %}<br>{% endif %}
             {% endfor %}
         {% endif %}
     {% endwith %}
