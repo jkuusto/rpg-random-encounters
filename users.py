@@ -1,5 +1,6 @@
 from db import db
 from sqlalchemy.sql import text
+from sqlalchemy.exc import SQLAlchemyError
 from flask import session
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -30,7 +31,10 @@ def register_user(username, password):
 
     hash_value = generate_password_hash(password)
     try:
-        sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
+        sql = text("""
+                   INSERT INTO users (username, password) 
+                   VALUES (:username, :password)
+                   """)
         db.session.execute(sql, {"username":username, "password":hash_value})
         db.session.commit()
         return True
@@ -41,4 +45,14 @@ def register_user(username, password):
 
 def user_id():
     return session.get("user_id",0)
+
+
+def delete_user(user_id):
+    try:
+        sql = text("DELETE FROM users WHERE id=:user_id")
+        db.session.execute(sql, {"user_id": user_id})
+        db.session.commit()
+    except SQLAlchemyError as e:
+        print("An error occurred deleting the user account:", e)
+        db.session.rollback()
 

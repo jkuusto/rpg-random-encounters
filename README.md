@@ -39,14 +39,13 @@ Progress update May 4, 2024
 - CSRF vulnerabilities have been patched.
 - An HTML template has been added for a uniform look across pages.
 - Visual appearance has been worked on. A monochrome look was chosen.
-- Character limits for user inputs have been enforced where applicable.
-- User feedback upon invalid input has be added.
-- User account deletion feature might be added.
+- Character limit for user input has been enforced where applicable.
+- User feedback upon invalid input has been implemented.
+- User account deletion feature has been added.
 
 
 Planned features for future development:
-- User account deletion on the dashboard
-- Verification dialogue when deleting games, encounters, or user
+- Verification dialogue when deleting games and encounters
 - Ability to roll directly on a chosen encounter table
 - More game parameters and accompanying encounter tables to games
 - Customizible game parameters
@@ -124,6 +123,8 @@ Or by assigning a specific database for this app:
 (venv) PS> Get-Content schema.sql | psql -U username -d databasename
 (venv) PS> Get-Content data.pgdump | psql -U username -d databasename
 ```
+Note: It is important to populate the database with data.pgdump. 
+Without it, the app will not have any preset data.
 
 You can now start the app with the following command:
 ```

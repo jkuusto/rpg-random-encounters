@@ -286,3 +286,17 @@ def register():
         flash("Registration failed due to an unexpected error", "error")
     return render_template("login.html")
 
+
+@app.route("/delete_account", methods=["POST"])
+def delete_account():
+    if session.get("csrf_token") != request.form.get("csrf_token"):
+        abort(403)
+    user_id_value = user_id()
+    if not user_id_value:
+        flash("You must be logged in to delete your account", "error")
+        return redirect("/login")
+    else:
+        delete_user(user_id_value)
+        flash("Your account has been successfully deleted", "success")
+        return redirect("/logout")
+

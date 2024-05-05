@@ -44,4 +44,15 @@
         <button type="submit">Create New Game</button>
     </form>
 
+    <br><hr>
+
+    <h2>Account</h2>
+    
+    <p>You can edit your account here.</p>
+
+    <form action="{{ url_for('delete_account') }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
+        <button type="submit" onclick="return confirm('Are you sure you want to delete your account?');">Delete Account</button>
+    </form>
+
 {% endblock %}
