@@ -114,11 +114,15 @@ PS> .\venv\Scripts\Activate.ps1
 Create and populate the database by pointing the schema to psql:
 ```
 (venv) $ psql < schema.sql
+(venv) $ psql -d databasename < data.pgdump
 ```
 Or by assigning a specific database for this app:
 ```
 (venv) $ psql -d newdbname -f schema.sql
+(venv) $ psql -d newdbname -f data.pgdump
+---
 (venv) PS> Get-Content schema.sql | psql -U username -d databasename
+(venv) PS> Get-Content data.pgdump | psql -U username -d databasename
 ```
 
 You can now start the app with the following command:
