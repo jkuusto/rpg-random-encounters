@@ -47,7 +47,11 @@
     {% with messages = get_flashed_messages(category_filter=["roll"]) %}
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-success">{{ message }}</div>
+                {% if loop.last %}
+                    <div class="alert alert-success flash-encounter">{{ message }}</div>
+                {% else %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
                 {% if not loop.last %}<br>{% endif %}
             {% endfor %}
         {% endif %}
