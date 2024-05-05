@@ -34,16 +34,23 @@ def create_new_game(game_name, user_id):
     try:
         sql = text("""
                    INSERT INTO games (name, user_id, biome_id) 
-                   VALUES (:name, :user_id, 1) RETURNING id""")
+                   VALUES (:name, :user_id, 1) RETURNING id
+                   """)
         result = db.session.execute(sql, 
                                     {"name":game_name, "user_id":user_id})
         game_id = result.fetchone()[0]
         db.session.commit()
         
         # Copy preset entries to the new game
-        copy_preset_entries("main_probability", game_id, 
+        '''copy_preset_entries("main_probability", game_id, 
                             ["game_id", "encounter_type_id", 
-                             "roll_range", "preset"])
+                             "roll_range", "preset"])'''
+        if main_presets_exist():
+            copy_preset_entries("main_probability", game_id, 
+                                ["game_id", "encounter_type_id", 
+                                 "roll_range", "preset"])
+        else:
+            use_default_presets(game_id)
         copy_preset_entries("encounters_general", game_id, 
                             ["game_id", "roll_range", 
                              "description", "preset"])
@@ -54,6 +61,31 @@ def create_new_game(game_name, user_id):
         print("An error occured while creating new game", e)
         db.session.rollback()
         return None
+
+
+def main_presets_exist():
+    sql = text("""
+               SELECT EXISTS(SELECT 1 FROM main_probability 
+               WHERE preset = TRUE)
+               """)
+    result = db.session.execute(sql).fetchone()
+    return result[0]
+
+
+def use_default_presets(game_id):
+    try:
+        sql = text("""
+                   INSERT INTO main_probability 
+                   (game_id, encounter_type_id, roll_range, preset) 
+                   VALUES 
+                   (:game_id, 1, 70, FALSE),
+                   (:game_id, 2, 30, FALSE);
+                   """)
+        db.session.execute(sql, {"game_id": game_id})
+        db.session.commit()
+    except SQLAlchemyError as e:
+        print("An error occurred inserting default presets", e)
+        db.session.rollback()
 
 
 def copy_preset_entries(table_name, game_id, columns):
