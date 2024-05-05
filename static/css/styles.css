@@ -69,6 +69,13 @@ textarea {
     height: 10em;
 }
 
+hr {
+    border: none;
+    height: 3px;
+    background: linear-gradient(to right, #202020, #747474, #202020);
+    border-radius: 3px;
+}
+
 #createGeneralEncounter, #createBiomeEncounter {
     display: block; /* Make the link behave like a block element */
     color: #747474;
