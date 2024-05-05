@@ -34,7 +34,7 @@ These are the the web app's main features:
 - Preset content uses 5E compatible game rules (see legal section).
 
 
-Progress update May 4, 2024
+Progress update May 5, 2024
 - All core features have been implemented.
 - CSRF vulnerabilities have been patched.
 - An HTML template has been added for a uniform look across pages.
@@ -152,6 +152,7 @@ To access the app locally, open a web browser and navigate to:
 11. Rewrite or delete encounters by clicking the appropriate button next to 
     the entry
 12. Add new encounters by clicking Add new encounter on the bottom of a table
+13. You may delete your account on the dashboard by clicking Delete Account
 
 
 ## Legal
