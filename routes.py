@@ -276,10 +276,13 @@ def logout():
 def register():
     username = request.form["username"]
     password = request.form["password"]
-    if register_user(username, password):
+    registration_result = register_user(username, password)
+    if registration_result is True  :
         flash("Registration successful, you can login now", "success")
         return redirect("/login")
+    elif registration_result is None:
+        flash("Username already exists, please choose another", "error")
     else:
-        flash("Registration failed", "error")
+        flash("Registration failed due to an unexpected error", "error")
     return render_template("login.html")
 
