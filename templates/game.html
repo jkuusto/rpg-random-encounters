@@ -36,7 +36,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="2">No encounter types set.</td>
+                        <td colspan="3">No encounter types set.</td>
                     </tr>
                 {% endfor %}
         </table>
@@ -89,13 +89,16 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="2">No general encounters set.</td>
+                        <td colspan="4">No general encounters set.</td>
                     </tr>
                 {% endfor %}
+                <tr>
+                    <td colspan="4">
+                        <a id="createGeneralEncounter" href="/create_encounter/general/{{ game_id }}">Add New General Encounter</a>
+                    </td>
+                </tr>
             </tbody>
         </table>
-        <!--<button id="createGeneralEncounter" onclick="window.location.href='/create_encounter/general/{{ game_id }}'">Add New Entry</button>-->
-        <a id="createGeneralEncounter" href="/create_encounter/general/{{ game_id }}">Add New General Encounter</a>
     </div>
 
     <br>
@@ -133,13 +136,16 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="2">No biome encounters set.</td>
+                        <td colspan="4">No biome encounters set.</td>
                     </tr>
                 {% endfor %}
+                <tr>
+                    <td colspan="4">
+                        <a id="createBiomeEncounter" href="/create_encounter/biome/{{ game_id }}">Add New Biome Encounter</a>
+                    </td>
+                </tr>
             </tbody>
         </table>
-        <!--<button id="createBiomeEncounter" onclick="window.location.href='/create_encounter/biome/{{ game_id }}'">Add New Entry</button>-->
-        <a id="createBiomeEncounter" href="/create_encounter/biome/{{ game_id }}">Add New Biome Encounter</a>
     </div>
 
     <script>

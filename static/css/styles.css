@@ -71,11 +71,7 @@ textarea {
 
 #createGeneralEncounter, #createBiomeEncounter {
     display: block; /* Make the link behave like a block element */
-    max-width: 55em;
     color: #747474;
-    border: 1px solid #000000;
     text-decoration: none;
-    box-sizing: border-box; /* Include padding and border in the element's total width */
-    padding: 3px;
     text-align: center;
 }
